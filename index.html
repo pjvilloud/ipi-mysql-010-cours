@@ -1,0 +1,1942 @@
+<!doctype html>
+
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1024" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>IPI - Cours de MySQL - module 010</title>
+    
+    <meta name="description" content="" />
+    <meta name="author" content="Pierre-Julien VILLOUD" />
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/idea.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    
+    <link rel="shortcut icon" href="favicon.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+    
+</head>
+
+<body class="impress-not-supported">
+
+<div class="fallback-message">
+    <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="my-navbar">
+  <a class="navbar-brand" href="index.html">
+    <img src="img/ipi.jpg" width="30" height="30" alt=""> Cours MySQL 010
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="nav nav-pills mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownIntroduction" href="#introduction" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Introduction
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownIntroduction">
+          <a class="dropdown-item" href="#introduction-historique">Historique</a>
+          <a class="dropdown-item" href="#introduction-avantages">Avantages de MySQL</a>
+          <a class="dropdown-item" href="#introduction-inconvenients">Inconvénients de MySQL</a>
+          <a class="dropdown-item" href="#introduction-clientserver">Principe du client-serveur</a>
+          <a class="dropdown-item" href="#introduction-vocabulaire">Vocabulaire</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownInstallation" href="#installation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Installation
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownInstallation">
+          <a class="dropdown-item" href="#installation-actions">Actions sur le serveur</a>
+          <a class="dropdown-item" href="#installation-reflexes">Premiers réflexes</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownClient" href="#client" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Développement <em>client</em>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownClient">
+          <a class="dropdown-item" href="#client-clientmysql">Le client <code>mysql</code></a>
+          <a class="dropdown-item" href="#client-database">Bases de données</a>
+          <a class="dropdown-item" href="#client-types">Types de données</a>
+          <a class="dropdown-item" href="#client-table">Tables</a>
+          <a class="dropdown-item" href="#client-data">Données</a>
+          <a class="dropdown-item" href="#client-contraintes">Contraintes d'intégrité</a>
+          <a class="dropdown-item" href="#client-index">Index</a>
+          <a class="dropdown-item" href="#client-sql">Fichiers SQL</a>
+          <a class="dropdown-item" href="#client-transaction">Notion de transaction</a>
+          <a class="dropdown-item" href="#client-requetes">Requêtes complexes</a>
+          <a class="dropdown-item" href="#client-vues">Vues</a>
+          <a class="dropdown-item" href="#client-fonctions">Curseurs</a>
+        </ul>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownServer" href="#server" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Développement <em>serveur</em>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownServer">
+          <a class="dropdown-item" href="#server-procstock">Procédures stockées</a>
+          <a class="dropdown-item" href="#server-fonctions">Fonctions</a>
+          <a class="dropdown-item" href="#server-triggers">Triggers</a>
+          <a class="dropdown-item" href="#server-comparatif">Comparatif</a>
+          <a class="dropdown-item" href="#server-prepared">Requêtes préparées</a>
+          <a class="dropdown-item" href="#server-impexp">Import/Export</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownBonus" href="#bonus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Bonus
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownBonus">
+          <a class="dropdown-item" href="#bonus-curseurs">Curseurs</a>
+          <a class="dropdown-item" href="#bonus-clusters">Clusters</a>
+          <a class="dropdown-item" href="#bonus-engine">Moteurs de stockage</a>
+        </div>
+      </li>
+    </ul>
+    <span class="navbar-text">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a class="btn btn-primary" href="https://github.com/pjvilloud/ipi-java-220-ex" target="_blank"><i class="fa fa-icon fa-gamepad"></i></a>
+            &nbsp;
+            <a class="btn btn-primary" href="mailto:pjvilloud@protonmail.com"><i class="fa fa-icon fa-envelope"></i></a>
+            &nbsp;
+            <a class="btn btn-primary" href="https://github.com/pjvilloud" target="_blank"><i class="fa fa-icon fa-github"></i></a>
+            &nbsp;
+            <a class="btn btn-primary" href="https://linkedin.com/pjvilloud" target="_blank"><i class="fa fa-icon fa-linkedin"></i></a>
+        </div>
+    </span>
+  </div>
+</nav>
+<div class="progress">
+  <div id="progress" class="progress-bar" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+<div class="container-fluid" id="impress">
+
+    <div id="accueil" class="step slide" data-nb="1" data-rel-x="0" data-y=0>
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container text-center">
+            <h1 class="display-3">Bienvenue !</h1>
+            <p class="lead">
+                <h2>Pierre-Julien VILLOUD</h2>
+                <div class="big-top-margin">
+                    <img src="img/pjvilloud.jpg" class="img-bienvenue rounded mx-auto d-block" alt="Pierre-Julien VILLOUD">
+                </div>
+                <div class="big-top-margin">
+                    <h3><i class="fa fa-icon fa-envelope-square"></i>&nbsp;<a href="mailto:pjvilloud@protonmail.com">pjvilloud@protonmail.com</a></h3>
+                    <h3><i class="fa fa-icon fa-github-square"></i>&nbsp;<a href="https://github.com/pjvilloud" target="_blank">https://github.com/pjvilloud</a></h3>
+                    <h3><i class="fa fa-icon fa-linkedin-square"></i>&nbsp;<a href="https://linkedin.com/pjvilloud" target="_blank">https://linkedin.com/pjvilloud</a></h3>
+                    <h3><i class="fa fa-icon fa-globe"></i>&nbsp;<a href="http://pjvilloud.github.io" target="_blank">http://pjvilloud.github.io</a></h3>
+                </div>
+            </p>
+          </div>
+        </div>
+        
+    </div>
+
+    <div id="introduction" class="step slide" data-nb="2" data-rel-x="0" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Introduction</h1>
+          <div class="container-fluid">
+            <div class="alert alert-warning small-font" role="alert">
+                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp;MySQL est un système de gestion de bases de données relationnelles. Il reste le deuxième SGBDR le plus utilisé au monde (derrière Oracle et devant SQL Server) même s'il est en perte de vitesse.
+            </div>
+            <div class="">
+              <img src="img/mysql-logo.png" alt="" width="900px">&nbsp;<img src='img/dilbert.gif'>
+            </div>
+            <div class="big-top-margin alert alert-primary small-font big-top-margin" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL est un logiciel libre et open source, mais distribué sous double license (GPL et propriétaire).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="introduction-historique" class="step slide" data-nb="3" data-rel-x="2000" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Historique</h1>
+          <div class="container">
+            <ul class="list-group">
+              <li class="list-group-item">Créé par Michael Widenius en 1995</li>
+              <li class="list-group-item">Version 4 en 2004 <br><small>(sous-requêtes et <em>prepared statements</em>)</small></li>
+              <li class="list-group-item"><strong>Version 5 en 2005</strong> <br> <small>
+                (curseurs, procédures stockées, <em>triggers</em>, vues)
+              </small></li>
+              <li class="list-group-item">Racheté par <em>Sun Microsystems</em> en 2008</li>
+              <li class="list-group-item">Oracle rachète Sun en 2010</li>
+              <li class="list-group-item"><span class="text-success">Version 5.7 en 2015</span><br> <small>
+                (dernière mise à jour le 17/07/2017)
+              </small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="introduction-avantages" class="step slide" data-nb="4" data-rel-x="2000" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3 text-success">Avantages de MySQL</h1>
+          <div class="container">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-success">Communauté</li>
+              <li class="list-group-item list-group-item-success">Open Source...</li>
+              <li class="list-group-item list-group-item-success">Orienté Web, Cloud, Big Data</li>
+              <li class="list-group-item list-group-item-success">Solidité et fiabilité</li>
+              <li class="list-group-item list-group-item-success">Supports OS</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="introduction-inconvenients" class="step slide" data-nb="5" data-rel-x="2000" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3 text-danger">Inconvénients de MySQL</h1>
+          <div class="container">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-danger" data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<img src='img/mariadb.png'>">Open Source ?</li>
+              <li class="list-group-item list-group-item-danger">Fonctionnalités</li>
+              <li class="list-group-item list-group-item-danger">De grands noms quittent MySQL</li>
+              <li class="list-group-item list-group-item-danger">Syntaxe</li>
+              <li class="list-group-item list-group-item-danger">Avenir incertain</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="introduction-clientserver" class="step slide" data-nb="6" data-rel-x="2000" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Principe du <em>client - serveur</em></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL, comme beaucoup de SGBDR, repose sur le principe du <em>client - serveur</em>. La base de données à proprement parler est installée sur un <strong>serveur</strong>. Afin de communiquer ou d'interragir avec ce serveur, il est nécessaire de passer par un logiciel <strong>client</strong>.
+            </div>
+            <div class="container">
+              <img src="img/MySQL_DBMS.png" alt="">
+            </div>
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Bien que ce soit souvent le cas dans les applications en entreprise, il n'est pas nécessaire que le client soit installé sur une machine différente de celle du serveur. Il peut bien évidemment avoir plusieurs clients qui accèdent à un même serveur.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="introduction-vocabulaire" class="step slide" data-nb="7" data-rel-x="2000" data-y="1100">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Vocabulaire</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Un peu de vocabulaire est nécessaire lorsqu'on parle de SGBDR.
+            </div>
+          </div>
+          <div class="container small-font text-center">
+            <ul class="list-group">
+              <li class="list-group-item">Base de données</li>
+              <li class="list-group-item">Schéma</li>
+              <li class="list-group-item">Table</li>
+              <li class="list-group-item">Colonne</li>
+              <li class="list-group-item">Ligne</li>
+              <li class="list-group-item">Requêtes</li>
+              <li class="list-group-item">Contraintes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="installation" class="step slide" data-nb="8" data-x="0" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Installation</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL est <a href="https://dev.mysql.com/downloads/mysql/">disponible</a> pour de nombreux systèmes d'exploitation. Nous verrons l'installation sous Windows et Linux.
+            </div>
+          </div>
+          <div class="container-fluid big-top-margin small-font row">
+            <div class="col-lg-6">
+              <h1 class="display-4">Windows</h1>
+              <div>
+                <p>Pour installer le serveur, <a href="https://dev.mysql.com/downloads/windows/installer/5.7.html">l'installeur</a> MySQL est recommandé.</p>
+                <p><i class="fa fa-icon fa-info-circle"></i>&nbsp;Installer le client MySQL Workbench en téléchargeant l'installeur <a href="https://dev.mysql.com/downloads/workbench/" target="_blank">ici</a>.</p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <h1 class="display-4">Linux (console)</h1>
+              <p>Exécuter la commande suivante dans une console de votre VM Linux</p>
+              <code>sudo apt-get install mysql-server mysql-client</code>
+            </div>
+          </div>
+          <div class="container-fluid big-top-margin">
+            <div class="alert alert-success small-font " role="alert">
+                <i class="fa fa-icon fa-check"></i>&nbsp;Ça y'est un serveur MySQL et un client en ligne de commande sont installés sur votre VM Linux, et un client graphique est installé sur votre VM Windows !
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="installation-actions" class="step slide" data-nb="9" data-rel-x="2000" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Actions sur le serveur</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Une fois MySQL installé, il est possible d'interragir avec le serveur avec le script <code>/etc/init.d/mysql</code> (sous Linux)
+            </div>
+            <div class="small-font">
+              <code>/etc/init.d/mysql start|stop|restart|reload|force-reload|status</code>
+            </div>
+            <div class="alert alert-primary small-font big-top-margin" role="alert">
+                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Avec, cette commande, le serveur peut être démarré, arrêté, redémarré... On peut également consulter son statut. Il est également possible d'utiliser <code>mysqladmin</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="installation-reflexes" class="step slide" data-nb="10" data-rel-x="2000" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les premiers réflexes</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                Une fois MySQL installé, effectuer les actions suivantes permet d'assurer la sécurité et la simplicité d'utilisation :
+            </div>
+          </div>
+          <div class="container">
+            <ul class="list-group small-font">
+              <li class="list-group-item"><h1 class="display-4">1 : Changer le mot de passe par défaut</h1>
+                <code>sudo mysqladmin -u root -h localhost password nouveau_mdp</code>
+              </li>
+              <li class="list-group-item"><h1 class="display-4">2 : Démarrer automatiquement le serveur au démarrage de la machine</h1>
+                <em>Cela est normalement automatique sur Windows (service MySQL) et Linux (script dans <code>/etc/init.d</code>)</em>
+              </li>
+              <li class="list-group-item">
+                <h1 class="display-4">3 : </h1>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client" class="step slide" data-nb="11" data-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Développement côté client</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Par l'intermédiaire d'un client (graphique ou en ligne de commande), il va être possible d'effectuer les actions suivantes :
+            </div>
+          </div>
+          <div class="container small-font">
+            <ul class="list-group">
+              <li class="list-group-item">Manipuler des bases de données</li>
+              <li class="list-group-item">Manipuler des tables</li>
+              <li class="list-group-item">Manipuler des données</li>
+              <li class="list-group-item">Exécuter des requêtes SQL issues d'un fichier</li>
+              <li class="list-group-item">Manipuler des index</li>
+              <li class="list-group-item">Gérer des contraintes</li>
+              <li class="list-group-item">Gérer des contraintes</li>
+              <li class="list-group-item">Effectuer des requêtes complexes</li>
+              <li class="list-group-item">Manipuler des vues</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-clientmysql" class="step slide" data-nb="12" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Le client <code>mysql</code></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Le client en ligne de commande <code>mysql</code> permet d'effectuer toutes les opérations possibles sur un serveur MySQL.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="bash">#Connexion au serveur MySQL local avec l'utilisateur courant et sans mot de passe
+mysql
+
+#Idem mais avec l'utilisateur 'toto' et sans mot de passe
+mysql -u toto
+
+#Idem mais avec le mot de passe 'pass'
+mysql -u toto -ppass
+
+#Idem mais demande le mot de passe
+mysql -u toto -p
+
+#Idem mais se connecte à la base 'base'
+mysql -u toto -p -D base
+
+#Idem mais connexion à un serveur distant dont l'adresse est 'hote'
+mysql -u toto -p -D base -h hote
+
+#Idem mais on spécifie le port (par défaut 3306)
+mysql -u toto -p -D base -h hote -P 3307</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour toutes les informations sur la commande <code>mysql</code>, tapez dans une console <code>man mysql</code> ou <code>mysql --help</code> pour accéder à la documentation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    <div id="client-database" class="step slide" data-nb="13" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Créer une base de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour créer une <strong>base de données</strong> ou un <strong>schéma</strong> (équivalent en MySQL), on utilise la commande suivante :
+                Encodage
+Interclassement, moteur de stockage, schéma, create, alter, drop
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">CREATE {DATABASE | SCHEMA} <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="<code>IF NOT EXISTS</code> permet de ne pas créer la base si elle existe déjà. Sans cette commande, la tentative de création d'une base existante retourne une erreur.">[IF NOT EXISTS]</span> <span data-toggle="popover" data-offset="100px" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="Le nom qui sera donné à la base de données">db_name</span> [create_specification] ...
+
+
+
+create_specification:
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Cette commande permet de définir l'<strong>encodage</strong> utilisé pour stocker les données de type texte. Lorsqu'il n'est pas spécifié, c'est l'encodage par défaut qui est utilisé.">[DEFAULT] CHARACTER SET [=] charset_name</span>
+  <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="La <strong>collation</strong> représente un ensemble de règle pour comparer les caractères entre eux. Lorsqu'il n'est pas spécifié, c'est la collation par défaut de l'encodage qui est utilisé.">| [DEFAULT] COLLATE [=] collation_name</span>
+
+--Crée la base de données 'mabase'
+CREATE DATABASE IF NOT EXISTS mabase;
+
+--Crée la base 'mabase' avec l'encodage 'utf8' et la collation utf8_general_ci
+CREATE DATABASE mabase CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+--Pour voir l'encodage et la collation par défaut du serveur
+SELECT @@character_set_server, @@collation_server; </code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;On recommandera l'utilisation de l'encodage <code>utf8</code> afin de gérer correctement les caractères accentués.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-database-alter" class="step slide" data-nb="14" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Modifier une base de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour modifier une <strong>base de données</strong>, on utilise la commande suivante :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">ALTER {DATABASE | SCHEMA} [db_name]
+    alter_specification ...
+ALTER {DATABASE | SCHEMA} db_name
+
+alter_specification:
+    [DEFAULT] CHARACTER SET [=] charset_name
+  | [DEFAULT] COLLATE [=] collation_name
+
+--Modifie la base 'mabase' pour utiliser l'encodage utf-8 
+--et la collation utf8_general_ci
+ALTER DATABASE mabase CHARACTER SET = 'utf8' COLLATE = utf8_general_ci;</code></pre></div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;On recommandera l'utilisation de l'encodage <code>utf8</code> afin de gérer correctement les caractères accentués.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-database-drop" class="step slide" data-nb="15" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Supprimer une base de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer une <strong>base de données</strong>, on utilise la commande suivante :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">DROP {DATABASE | SCHEMA} <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="<code>IF EXISTS</code> permet de ne supprimer une table que si cette dernière existe. Si cette commande n'est pas utilisée, une tentative de suppression d'une table non existante remontera une erreur.">[IF EXISTS]</span> db_name
+
+
+
+
+--Supprime la base 'mabase' et toutes ses données
+DROP DATABASE mabase;</code></pre></div>
+          <div class="container-fluid">
+            <div class="alert alert-warning small-font fun" role="alert" data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="<img src='img/really.gif'>" data-template="<div class='popover large-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body text-center'></div></div>">
+                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp;Évidemment, supprimer une base de données supprime toutes les données contenu dans cette dernière...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types" class="step slide" data-nb="16" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les types de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL supporte la plupart des <strong>types de données</strong> de SQL.
+            </div>
+          </div>
+          <div class="container small-font big-top-margin">
+            <ul class="list-group">
+              <li class="list-group-item">Types numériques</li>
+              <li class="list-group-item">Types date et heure</li>
+              <li class="list-group-item">Types chaîne</li>
+              <li class="list-group-item">Autres types</li>
+            </ul>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font big-top-margin " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL propose également ces <strong>propres types</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-numeriques" class="step slide" data-nb="17" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Types de données entier</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL supporte tous les <strong>types de données</strong> entier <span class="text-success">standards</span> de SQL ainsi que d'autres <span class="text-info">spécifiques</span> à MySQL.
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <table class="table table-striped small-font">
+                      <thead>
+                        <tr>
+                          <th>Type</th>
+                          <th>Occupation en mémoire</th>
+                          <th>Intervalle (Signed)</th>
+                          <th>Intervalle (Unsigned)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="bg-info">
+                            <td><code>BIT(M)</code></td>
+                            <td>1 bit à 8 octets</td>
+                            <td colspan="2">Ce type est utilisé pour stocker des valeurs binaires, avec la notation <code>b'value'</code> (ex : <code>b'111'</code> = 7)</td>
+                        </tr>
+                        <tr class="bg-info">
+                            <td><code>TINYINT(M)</code></td>
+                            <td>1 octet</td>
+                            <td>-128 à 127</td>
+                            <td>0 à 255</td>
+                        </tr>
+                        <tr class="bg-info">
+                            <td><code>BOOL</code> ou <code>BOOLEAN</code></td>
+                            <td>1 octet</td>
+                            <td colspan="2">Les booléens sont représentés comme des <code>TINYINT(1)</code>. La valeur 0 équivaut à <code>false</code>, toute autre valeur à <code>true</code>. A noter que les valeurs <code>TRUE</code> et <code>FALSE</code> sont respectivement des alias de 1 et 0.</td>
+                        </tr>
+                        <tr>
+                          <td class="bg-success"><code>SMALLINT(M)</code></td>
+                          <td class="bg-success">2 octets</td>
+                          <td class="bg-success">-37 768 à 32 767</td>
+                          <td class="bg-info">0 à 65 535</td>
+                        </tr>
+                        <tr class="bg-info">
+                          <td><code>MEDIUMINT(M)</code></td>
+                          <td>3 octets</td>
+                          <td>-8 388 608 à 8 388 607</td>
+                          <td>0 à 16 777 215</td>
+                        </tr>
+                        <tr>
+                          <td class="bg-success"><code>INT(M)</code> ou <code>INTEGER(M)</code></td>
+                          <td class="bg-success">4 octets</td>
+                          <td class="bg-success">-2 147 489 648 à 2 147 483 647</td>
+                          <td class="bg-info">0 à 4 294 967 295</td>
+                        </tr>
+                        <tr class="bg-info">
+                          <td><code>BIGINT(M)</code></td>
+                          <td>8 octets</td>
+                          <td>-9 223 372 036 854 775 808 à 9 223 372 036 854 775 807</td>
+                          <td>0 à 18 446 744 073 709 551 615</td>
+                        </tr>
+                      </tbody>
+                    </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>M</code> représente la largeur maximum d'affichage pour les types numériques. C'est un paramètre facultatif et sa valeur maximale est 255. Ce paramètre ne contraint pas l'intervalle de valeurs qui peut être stocké dans chaque type. 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-decimal" class="step slide" data-nb="18" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Types de données à <em>virgule fixe</em></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>types de données</strong> à virgule fixe permettent de stocker des valeurs décimales exactes, comme des données monétaires par exemple (prix, salaire...).
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left big-top-margin">
+            <table class="table table-striped small-font">
+                      <thead>
+                        <tr>
+                          <th>Type</th>
+                          <th>Occupation en mémoire</th>
+                          <th>Exemple</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                            <td><code>DECIMAL(P,E)</code> ou <code>NUMERIC(P,E)</code></td>
+                            <td data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content='<table><colgroup><col><col></colgroup><thead><tr><th scope="col">Nombre de chiffres</th><th scope="col">Nombre d&apos;octets</th></tr></thead><tbody><tr><td scope="row">0</td><td>0</td></tr><tr><td scope="row">1–2</td><td>1</td></tr><tr><td scope="row">3–4</td><td>2</td></tr><tr><td scope="row">5–6</td><td>3</td></tr><tr><td scope="row">7–9</td><td>4</td></tr></tbody></table>'>X octets pour la partie décimale, Y octets pour la partie entière</td>
+                            <td><code>DECIMAL(5,2)</code> permet de représenter 5 chiffres dont 2 après la virgule, soit l'intervalle -999.99 à 999.99</td>
+                        </tr>
+                      </tbody>
+                    </table>
+          </div>
+          <div class="container-fluid big-big-top-margin">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>P</code> représente la précision, c'est-à-dire le nombre de chiffres significatifs à stocker, tandis que <code>E</code> représente l'échelle, c'est-à-dire le nombre de chiffres après la virgule. A noter que <code>P</code> a pour valeur par défaut 10 (maximum 65) et <code>E</code> 0.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-flottant" class="step slide" data-nb="19" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Types de données à <em>virgule flottante</em></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>types de données</strong> à virgule flottante (<span class="text-success">standards</span> ou <span class="text-info">spécifiques</span>) permettent de stocker des valeurs décimales approchées.
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left big-top-margin">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Occupation en mémoire</th>
+                  <th>Remarques</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="bg-success">
+                    <td><code>FLOAT(P)</code></td>
+                    <td>4 octets</td>
+                    <td><code>P</code> est facultatif mais s'il est spécifié et qu'il est compris entre 0 et 23, ce sera bien un type <code>FLOAT</code> qui sera utilisé, si c'est entre 24 et 53, c'est un type <code>DOUBLE</code> qui sera en fait utilisé.</td>
+                </tr>
+                <tr class="bg-success">
+                    <td><code>DOUBLE</code></td>
+                    <td>8 octets</td>
+                    <td></td>
+                </tr>
+                <tr class="bg-info">
+                    <td><code>FLOAT(P,E)</code> ou <code>REAL(P,E)</code> ou <code>DOUBLE PRECISION(P,E)</code></td>
+                    <td>4 ou 8 octets</td>
+                    <td><code>FLOAT(5,2)</code> permet de représenter 5 chiffres dont 2 après la virgule, soit l'intervalle -999.99 à 999.99</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid big-top-margin">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Ces types sont à utiliser avec précaution car des opérations d'arrondi sont effectuées par MySQL. Pour des valeurs fixes, préférer le type <code>DECIMAL</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-precisions" class="step slide" data-nb="20" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Précisions sur les types numériques</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>UNSIGNED</code> peut être spécifié après le type (entier ou flottant) pour préciser que les valeurs seront positives ou nulles. L'intervalle de valeurs est décalé à partir de 0 (sauf pour les flottants où cela n'a pas d'effet). Ce paramètre ne fait pas partie du standard SQL.
+            </div>
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>ZEROFILL</code> peut être spécifié après le type (entier uniquement) lorsqu'on spécifie la largeur d'affichage. Ainsi un champ <code>SMALLINT(3) ZEROFILL</code>, 5 sera affiché <code>005</code> mais 1234 pourra bien être stocké dans ce champ et sera affiché <code>1234</code>. A noter qu'un champ <code>ZEROFILL</code> est automatiquement <code>UNSIGNED</code>.
+            </div>
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>AUTO_INCREMENT</code> peut être spécifié après le type (entier ou flottant). Cela permet de gérer automatiquement des <em>séquences</em>. Ce point sera précisé plus tard.
+            </div>
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL gère le dépassement d'intervalle de deux manières selon le mode du serveur. <br>
+                Lorsque le mode <em>strict</em> est activé, le serveur remonte une erreur pour tout dépassement. Lorqu'il ne l'est pas, un avertissement est affiché au client et la valeur est tronquée ou affectée à la borne la plus proche.
+                <code>TINYINT : 256 => 127
+TINYINT UNSIGNED : 256 => 255</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-date" class="step slide" data-nb="21" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Types date</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour représenter des dates en MySQL, on utilise les types (<span class="text-success">standards</span> ou <span class="text-info">spécifiques</span>) suivants :
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Format</th>
+                  <th>Remarques</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-success">
+                    <td><code>DATE</code></td>
+                    <td><code>'YYYY-MM-DD'</code></td>
+                    <td>Utilisé pour les dates sans nécessité de stocker l'heure. L'intervalle des valeurs possibles est '1000-01-01' à '9999-12-31'</td>
+                </tr>
+                <tr class="text-info">
+                    <td><code>DATETIME</code></td>
+                    <td><code>'YYYY-MM-DD HH:MM:SS[.fraction]'</code></td>
+                    <td>Utilisé pour les dates et heure. L'intervalle des valeurs possibles est '1000-01-01 00:00:00' à '9999-12-31 23:59:59'. </td>
+                </tr>
+                <tr class="text-info">
+                    <td><code>TIMESTAMP</code></code></td>
+                    <td><code>'YYYY-MM-DD HH:MM:SS[.fraction]'</code></td>
+                    <td>Type correspondant au Timestamp Unix. L'intervalle des valeurs possibles est 1970-01-01 00:00:01' à '2038-01-19 03:14:07'</td>
+                </tr>
+                <tr class="text-success">
+                    <td><code>TIME</code></code></td>
+                    <td><code>HH:MM:SS[.fraction]'</code></td>
+                    <td><code>TIME</code> peut être utilisé pour représenter une heure dans la journée, mais aussi pour représenter une durée. L'intervalle des valeurs possibles est '-838:59:59.000000' à '838:59:59.000000'. </td>
+                </tr>
+                <tr class="text-info">
+                    <td><code>YEAR</code></code></td>
+                    <td><code>YYYY</code></td>
+                    <td>L'intervalle des valeurs possibles est entre 1901 et 2155.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible de préciser l'heure à la micro-seconde près. On utilise pour cela <code>fraction</code>. Ex : '2017-12-31 23:59:59:999999'
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-string" class="step slide" data-nb="22" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les types chaînes</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour stocker des <strong>chaînes de caractère</strong>, MySQL propose plusieurs types (<span class="text-success">standards</span> ou <span class="text-info">spécifiques</span>). 
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Occupation mémoire</th>
+                  <th>Remarques</th>
+                </tr>
+              </thead>
+              <tbody data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+                    data-title="Occupation mémoire en fonction du type" data-content='<table><colgroup><col><col><col><col><col></colgroup><thead><tr><th scope="col">Valeur</th><th scope="col"><code class="literal">CHAR(4)</code></th><th scope="col">Mémoire</th><th scope="col"><code class="literal">VARCHAR(4)</code></th><th scope="col">Mémoire</th></tr></thead><tbody><tr><td scope="row"><code class="literal">&apos;&apos;</code></td><td><code class="literal">&apos;&nbsp;&nbsp;&nbsp;&nbsp;&apos;</code></td><td>4 octets</td><td><code class="literal">&apos;&apos;</code></td><td>1 octet</td></tr><tr><td scope="row"><code class="literal">&apos;ab&apos;</code></td><td><code class="literal">&apos;ab&nbsp;&nbsp;&apos;</code></td><td>4 octets</td><td><code class="literal">&apos;ab&apos;</code></td><td>3 octets</td></tr><tr><td scope="row"><code class="literal">&apos;abcd&apos;</code></td><td><code class="literal">&apos;abcd&apos;</code></td><td>4 octets</td><td><code class="literal">&apos;abcd&apos;</code></td><td>5 octets</td></tr><tr><td scope="row"><code class="literal">&apos;abcdef&apos;</code></td><td><code class="literal">&apos;abcd&apos;</code></td><td>4 octets</td><td><code class="literal">&apos;abcd&apos;</code></td><td>5 octets</td></tr></tbody></table>' data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">   
+                <tr>
+                    <td><code class="text-success">CHAR(X)</code></td>
+                    <td><code>X</code> octets</td>
+                    <td><code>X</code> correspond à la taille maximum de la chaîne de caractère et doit être compris entre 0 et 255. Une chaîne de caractère dont la taille est inférieure à <code>X</code> est automatiquement <em>complétée</em> avec des espaces à droite.</td>
+                </tr>
+                <tr>
+                    <td><code class="text-success">VARCHAR(X)</code></td>
+                    <td>(Longueur de la chaîne + 1) octet(s)</td>
+                    <td>Contrairement à <code class="text-success">CHAR</code>, les espaces en début et en fin sont conservés.</td>
+                </tr>
+                <tr>
+                    <td>
+                      <code class="text-success">TEXT</code> <br>
+                      <code class="text-info">TINYTEXT</code> <br> 
+                      <code class="text-info">MEDIUMTEXT</code> <br> 
+                      <code class="text-info">LONGTEXT</code>
+                    </td>
+                    <td>(Longueur de la chaîne + (1~4)) octet(s)</td>
+                    <td>
+                      <code class="text-success">TEXT</code> 65 535 caractères <br> 
+                      <code class="text-info">TINYTEXT</code> 255 caractères <br>
+                      <code class="text-info">MEDIUMTEXT</code> 16 777 215 bytes <br> 
+                      <code class="text-info">LONGTEXT</code> 4 294 967 295 bytes
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;On représente une chaîne de caractère entre simple quotes en MySQL : Ex : <code>'Hello'</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-binary" class="step slide" data-nb="23" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les types binaires</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL permet également de stocker des chaînes de caractères contenant des valeurs binaires avec les types (<span class="text-success">standards</span> ou <span class="text-info">spécifiques</span>) suivants :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Équivalent</th>
+                </tr>
+              </thead>
+              <tbody>   
+                <tr>
+                    <td><code class="text-info">BINARY(X)</code></td>
+                    <td><code>CHAR</code></td>
+                </tr>
+                <tr>
+                    <td><code class="text-info">VARBINARY(X)</code></td>
+                    <td><code>VARCHAR</code></td>
+                </tr>
+                <tr>
+                    <td>
+                      <code class="text-success">BLOB</code> <br>
+                      <code class="text-info">TINYBLOB</code> <br> 
+                      <code class="text-info">MEDIUMBLOB</code> <br> 
+                      <code class="text-info">LONGBLOB</code>
+                    </td>
+                    <td>
+                      <code>TEXT</code>  <br> 
+                      <code>TINYTEXT</code> <br>
+                      <code>MEDIUMTEXT</code>  <br> 
+                      <code>LONGTEXT</code> 
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Ce genre de types est utile pour stocker des fichiers non textuels (images, zip, pdf...).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-enumset" class="step slide" data-nb="24" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les types à valeurs restreintes</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Lorsque l'on veut stocker des valeurs ayant un ensemble de valeurs restreintes, on peut utiliser les types suivants : 
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Exemple</th>
+                  <th>Remarques</th>
+                </tr>
+              </thead>
+              <tbody>   
+                <tr data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true"
+                    data-title="Stockage des valeurs" data-content='<table class="text-center"><colgroup><col><col></colgroup><thead><tr><th scope="col">Valeur</th><th scope="col">Index</th></tr></thead><tbody><tr><td scope="row"><code class="literal">NULL</code></td><td><code class="literal">NULL</code></td></tr><tr><td scope="row"><code class="literal">&apos;&apos;</code></td><td>0</td></tr><tr><td scope="row"><code class="literal">&apos;XS&apos;</code></td><td>1</td></tr><tr><td scope="row"><code class="literal">&apos;S&apos;</code></td><td>2</td></tr><tr><td scope="row"><code class="literal">&apos;M&apos;</code></td><td>3</td></tr><tr><td colspan="2">...</td></tr></tbody></table>'>
+                    <td><code>ENUM</code></td>
+                    <td><code>ENUM('XS', 'S', 'M', 'L', 'XL')</code></td>
+                    <td>
+                      Les valeurs sont stockées sous forme d'index entier et l'ordre de tri correspond à l'ordre dans lequel les valeurs sont déclarées. Un <code>ENUM</code> peut avoir jusqu'à 65 535 valeurs différentes. 
+                      <p>On peut l'utiliser soit par sa valeur <code>'M'</code> soit par son index <code>3</code>.</p>
+                  </td>
+                </tr>
+                <tr data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+                    data-title="Exemple de valeurs" data-content='<code>&apos;&apos;</code>, <code>&apos;actu&apos;</code>, <code>&apos;actu,politique&apos;</code>'>
+                    <td><code>SET</code></td>
+                    <td><code>SET('actu', 'politique', 'economie')</code></td>
+                    <td>Une valeur de type <code>SET</code> peut contenir 0 ou plusieurs valeurs parmi les valeurs spécifiées dans le type. Ces valeurs sont séparées par des <code>,</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est fortement recommandé de ne pas utiliser de chiffres pour les valeurs d'un <code>ENUM</code> afin d'éviter de les confondre avec les index. On ne peut pas utiliser de valeurs contenant des <code>,</code> dans un <code>SET</code>. <br>Il ne faut pas abuser des types <code>ENUM</code> et <code>SET</code>...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-types-autres" class="step slide" data-nb="25" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les autres types</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL propose également d'autres types <span class="text-info">spécifiques</span> pour représenter des informations particulières.
+            </div>
+          </div>
+          <div class="container small-font big-top-margin">
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-info">Données géographiques</li>
+              <li class="list-group-item list-group-item-info">JSON</li>
+            </ul>
+          </div>
+          <div class="container-fluid big-top-margin">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Voir la <a href="https://dev.mysql.com/doc/refman/5.7/en/data-types.html">documentation</a> pour les détails concernant ces types.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="escape" class="step slide" data-nb="25" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Ça va ?</h1>
+          <div class="container">
+            <img src="img/escape.gif" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-table" class="step slide" data-nb="26" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Création de tables</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Voici la syntaxe MySQL pour créer une table.
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left"><img src="img/vehicule.png" alt="" class="big-top-margin pull-right">
+            <pre><code class="mysql">CREATE TABLE [IF NOT EXISTS] tbl_name (<span class="text-info">create_definition</span>,...)
+
+  <span class="text-info">create_definition</span>:
+    col_name <span class="text-primary">column_definition</span>
+
+  <span class="text-primary">column_definition</span>:
+    <span class="text-success">data_type</span> [NOT NULL | NULL] <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="top" data-html="true" data-content="<code>NOT NULL</code> permet d'obliger de renseigner une valeur lors de l'insertion de données. <code>DEFAULT</code> permet de définir une valeur par défaut.">[DEFAULT default_value]</span>
+      <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Il est possible de définir des contraintes sur les colonnes directement lors de la définition de ces dernières. <ul><li><code>AUTO_INCREMENT</code> permet d'incrémenter automatiquement la valeur d'une colonne</li>
+      <li><code>UNIQUE</code> permet d'assurer l'unicité des valeurs d'une colonne</li>
+      <li><code>PRIMARY KEY</code> permet de définir la colonne en tant que clé primaire</li></ul>" data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">[AUTO_INCREMENT] [UNIQUE [KEY] | [PRIMARY] KEY]</span>
+
+    <span class="text-success">data_type</span>: INT | FLOAT | ...
+
+--Exemple
+CREATE TABLE IF NOT EXISTS vehicule (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  marque VARCHAR(50) NOT NULL,
+  modele VARCHAR(50),
+  immatriculation VARCHAR(30) NOT NULL UNIQUE,
+  date_mise_circulation DATE NOT NULL
+) ;
+</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour voir la liste des tables d'une base de données, on peut exécuter la requête suivante <code>SHOW TABLES;</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-table-alter" class="step slide" data-nb="27" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Modification de tables</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Voici la syntaxe MySQL pour modifier une table déjà créée, afin d'y ajouter, de modifier ou de supprimer une colonne, un index ou une contrainte.
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <pre><code class="mysql">ALTER TABLE tbl_name [<span class="text-info">alter_specification</span> [, <span class="text-info">alter_specification</span>] ...] 
+    <span class="text-info">alter_specification</span>:
+      <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet d'ajouter une colonne, un index, une clé primaire ou une clé étrangère">| ADD [COLUMN] (col_name column_definition [FIRST | AFTER col_name])
+      | ADD {INDEX|KEY} [index_name] [idx_type] (idx_col,...) [idx_opt] ...
+      | ADD [CONSTRAINT [symbol]] PRIMARY KEY [idx_type] (idx_col,...) [idx_opt] ...
+      | ADD [CONSTRAINT [symbol]] UNIQUE [INDEX|KEY] [idx_name] [idx_type] (idx_col,...) [idx_opt] ...
+      | ADD [CONSTRAINT [symbol]] FOREIGN KEY [idx_name] (idx_col,...) reference_definition</span>
+      
+      <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de redéfinir une colonne afin de changer son nom, son type ou des contraintes portant sur cette colonne.">| CHANGE [COLUMN] old_col_name new_col_name column_definition</span>
+      
+      <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de supprimer une colonne, un index, une clé primaire ou une clé étrangère.">| DROP [COLUMN] col_name
+      | DROP {INDEX|KEY} index_name
+      | DROP PRIMARY KEY
+      | DROP FOREIGN KEY fk_symbol</span>
+--Exemple
+ALTER TABLE vehicule 
+  DROP COLUMN modele,
+  CHANGE COLUMN date_mise_circulation date_circulation DATE NOT NULL,
+  ADD CONSTRAINT UNIQUE (immatriculation);</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;La redéfinition d'une colonne peut altérer tout ou partie des données.</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-table-drop" class="step slide" data-nb="28" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Suppression de tables (et son contenu)</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer une table d'une base de données, on utilise la syntaxe suivante :
+            </div>
+          </div>
+          <div class="container small-font big-top-margin text-left">
+            <pre><code class="sql">DROP TABLE [IF EXISTS]
+  tbl_name [, tbl_name] ...
+
+--Exemple
+DROP TABLE IF EXISTS vehicule;</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-warning small-font big-top-margin " role="alert">
+                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp;Supprimer une table supprime évidemment également son contenu...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-table-truncate" class="step slide" data-nb="29" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Vider une table</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer les données d'une table tout en conservant sa structure, on utilise la syntaxe suivante :
+            </div>
+          </div>
+          <div class="container small-font big-top-margin text-left">
+            <pre><code class="sql">TRUNCATE [TABLE] tbl_name
+
+--Exemple
+TRUNCATE TABLE vehicule;
+</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font big-top-margin " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>TRUNCATE</code> diffère d'un <code>DELETE</code> car la table est supprimée puis recréée, ce qui est plus rapide. Cependant, un <code>TRUNCATE</code> est impossible lorsque la table possède des clés étrangères. A noter que les séquences portant sur la table sont réinitialisées
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-data" class="step slide" data-nb="30" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Insertion de données dans une table</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour insérer une ou plusieurs lignes dans une table, on utilise la syntaxe suivante :
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <pre><code class="sql">INSERT [INTO] tbl_name [(col_name [, col_name] ...)]
+    {VALUES | VALUE} (value_list) [, (value_list)] ...
+
+    value:
+        {expr | DEFAULT}
+
+    value_list:
+        value [, value] ...
+  
+  --Exemple
+  INSERT INTO vehicule (marque, modele, immatriculation, date_mise_circulation) VALUES
+    ('Peugeot', '208', 'AA-123-BB', '2017-10-02'),
+    ('Renault', 'Clio', 'DD-456-CC', '2017-10-01');
+  </code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les valeurs non spécifiées sont affectées avec la valeur par défaut définie lors de la création de la table, ou <code>null</code>. Toutes les colonnes déclarées <code>NOT NULL</code> doivent être définies.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-data-select" class="step slide" data-nb="31" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Lecture des données des tables</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour récupérer des lignes d'une ou plusieurs tables, on utilise la syntaxe suivante :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">SELECT [DISTINCT]
+    select_expr [, select_expr ...]
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Sélection des tables sur lesquelles on va travailler">[FROM table_references]</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Pour ne récupérer que les données qui satisfont une condition">[WHERE where_condition]</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Aggréger les données (somme, moyenne, nombre d'éléments...) avec éventuellement une condition">[GROUP BY col_name [ASC | DESC], ... ]
+    [HAVING where_condition]</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Ordonner les lignes selon une ou plusieurs colonnes dans l'ordre ascendant ou descendant">[ORDER BY col_name [ASC | DESC], ...]</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Limiter le nombre de résultats en sortie.">[LIMIT row_count]</span>
+
+--Tous les véhicules BMW ordonné par modèle croissant
+SELECT * FROM vehicule
+WHERE marque = 'BMW'
+ORDER BY modele ASC;
+
+--Récupère toutes les marques ayant au moins trois véhicules et affiche le nombre 
+SELECT marque, count(*) FROM vehicule
+GROUP BY marque
+HAVING count(*) > 2;</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Nous verrons plus tard comment réaliser des requêtes plus complexes avec des jointures et des sous-requêtes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-data-update" class="step slide" data-nb="32" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Mise à jour de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour changer les valeurs d'une ou plusieurs colonnes des lignes d'une table, on utilise la syntaxe suivante :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="mysql">UPDATE table_name
+    <span data-toggle="popover" data-offset="-15px" data-trigger="hover click" data-placement="right" data-html="true" data-content="On définit ici les affectations à faire sur les lignes sélectionnées.">SET assignment_list</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="On peut aussi ne mettre à jour que les données qui satisfont une condition">[WHERE where_condition]</span>
+    <span data-toggle="popover" data-offset="15px" data-trigger="hover click" data-placement="right" data-html="true" data-content="Enfin, on peut limiter le nombre d'éléments mis à jour.">[LIMIT row_count]</span>
+
+value:
+    {expr | DEFAULT}
+
+assignment:
+    col_name = value
+
+assignment_list:
+    assignment [, assignment] ...
+
+--Met à jour tous les véhicules de marque 'bmw' pour mettre la marque en majuscule
+UPDATE vehicule SET marque = 'BMW' WHERE marque = 'bmw';</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Évidemment, les mises à jour doivent respecter les contraintes définies sur les colonnes.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-data-delete" class="step slide" data-nb="33" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Suppression de données</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer tout (on peut alors plutôt utiliser <code>TRUNCATE</code>) ou partie des données d'une table, on utilise la syntaxe suivante : 
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="mysql">DELETE FROM tbl_name
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="On ne supprime que les éléments qui satisfont une condition.">[WHERE where_condition]</span>
+    <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="On ne supprime que les X premiers éléments.">[LIMIT row_count]</span>
+
+--Suppression de tous les véhicules dont la date de mise 
+--en circulation est antérieure au 1er janvier 2017.
+DELETE FROM vehicule WHERE date_mise_circulation < '2017-01-01';</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;On ne peut pas supprimer les lignes qui sont référencées par une clé étrangère d'une autre table.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-fichiersql" class="step slide" data-nb="34" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Exécuter un fichier SQL</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp; Exécuter des requêtes une par une n'est pas adapté pour la création de toute une base de données. Il est possible de mettre plusieurs requêtes dans un fichier et de le faire exécuter séquentiellement par le serveur.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">
+ --Fichier create.sql
+ --Création de la table véhicule
+ CREATE TABLE vehicule ... ;
+
+--Insertion des valeurs
+ INSERT INTO vehicule (...) VALUES (...);
+ INSERT INTO vehicule (...) VALUES (...);
+ INSERT INTO vehicule (...) VALUES (...);
+ ...
+
+--Depuis un shell
+mysql mabase < create.sql
+
+--Depuis le client mysql
+source create.sql
+\. create.sql</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour l'exécution de gros fichiers SQL, on préférera l'utilitaire <code>mysqlimport</code> qui est plus rapide.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-contraintes" class="step slide" data-nb="35" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les contraintes d'intégrité</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible de contraindre certaines colonnes pour assurer leur non nullité, leur unicité, ou pour préciser leur lien avec des colonnes d'autres tables.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="mysql"><span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Clé primaire" data-content="Une clé primaire permet d'identifier une ligne de manière unique dans une table. Il ne peut y en avoir qu'une par table et à la différence d'une clé unique, une clé primaire ne peut prendre la valeur <code>NULL</code>." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">--Ajout dans la table vehicule d'une clé primaire sur le champ id
+ALTER TABLE vehicule ADD PRIMARY KEY(id);
+--Suppression de la clé primaire
+ALTER TABLE vehicule DROP PRIMARY KEY; </span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Clé unique" data-content="Une contrainte <code>UNIQUE</code> permet d'assurer l'unicité d'une colonne au sein d'une table (la valeur <code>NULL</code> est autorisée et n'a pas besoin d'être unique). Ainsi, il ne sera pas possible d'insérer deux véhicules avec la même immatriculation. A noter que la création d'une contrainte <code>UNIQUE</code> crée automatiquement un index sur cette colonne." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">--Ajout d'une contrainte d'unicité sur l'immatriculation
+ALTER TABLE vehicule ADD CONSTRAINT immat_unique UNIQUE(immatriculation);
+--Suppression de la contrainte
+ALTER TABLE vehicule DROP INDEX immat_unique;</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Clé étrangère" data-content="Soit la table <code>vehicule</code> avec le champ <code>proprietaire_id</code> et la table <code>proprietaire</code> avec la clé primaire <code>id</code>. On peut définir un lien entre les deux colonnes à l'aide d'une clé étrangère. Lors de l'insertion d'un véhicule, le champ <code>proprietaire_id</code> devra référencer un propriétaire existant." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">--Ajout d'une clé étrangère entre vehicule et proprietaire
+ALTER TABLE vehicule ADD CONSTRAINT fk_vehicule_proprietaire 
+FOREIGN KEY (proprietaire_id) REFERENCES proprietaire(id);
+--Suppression de la clé étrangère
+ALTER TABLE vehicule DROP FOREIGN KEY fk_vehicule_proprietaire;</span></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Une contrainte d'intégrité peut porter sur plusieurs champs. On peut déclarer ces contraintes à la création de la table, ou via un <code>ALTER TABLE</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-index" class="step slide" data-nb="36" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les index</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>index</strong> sont utilisés pour trouver des lignes avec des valeurs spécifiques plus rapidement. Sans index, MySQL doit commencer avec la première ligne et lire la table entièrement. Les recherches portant sur des colonnes indexées sont donc plus rapides. En MySQL, <code>KEY</code> et <code>INDEX</code> sont équivalents.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">CREATE [UNIQUE] INDEX index_name
+    [index_type]
+    ON tbl_name (index_col_name,...)
+
+index_col_name:
+    col_name <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Pour les colonnes contenant des chaînes de caractères, il est possible d'indexer uniquement les X premiers caractères en spécifiant la longueur.">[(length)]</span>
+
+--Index sur la marque et le modèle d'un véhicule
+CREATE INDEX idx_marque ON vehicule(marque, modele);
+--Suppression de l'index
+DROP INDEX idx_marque ON vehicule;
+
+--Index les deux premiers caractères de l'immatriculation
+CREATE INDEX idx_immat ON vehicule(immatriculation(2));</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-warning small-font " role="alert">
+                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp; Attention, au plus il y a d'index sur une table, au plus les opérations de création et de mises à jour sur cette dernière prennent du temps (surtout sur les tables comportant beaucoup de lignes). Il s'agit donc de trouver l'équilibre entre insertion et recherche.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-transaction" class="step slide" data-nb="37" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">La notion de transaction</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les transactions permettent d'exécuter un ensemble de requête en un seul bloc. Cela permet d'annuler cet ensemble lorsqu'une des requêtes échoue évitant ainsi d'effectuer une opération à moitié.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql"><span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Par défaut, chaque transaction exécutée est automatiquement validée (commit). On peut soit désactiver ce comportement (pour la session en cours uniquement) soit démarrer manuellement une transaction." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">SET autocommit=0;</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Instruction pour démarrer une nouvelle transaction. Celle-ci se terminera au premier <code>COMMIT</code> ou <code>ROLLBACK</code>">START TRANSACTION;</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de valider toutes les requêtes de la transaction en cours.">COMMIT;</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Permet d'annuler toutes les requêtes de la transaction en cours.">ROLLBACK;</span> 
+
+--Exemple : Début de transaction
+START TRANSACTION;
+INSERT INTO vehicule ...;
+INSERT INTO vehicule ...;
+...
+--Validation de toutes les requêtes
+COMMIT;</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il n'est pas possible d'utiliser les transactions pour les opérations <code>CREATE/DROP DATABASE</code>, <code>CREATE/DROP/ALTER/RENAME TABLE</code>, <code>CREATE/DROP INDEX</code> et de manière générale tout ce qui touche à la structure de la base de données.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-sousrequetes" class="step slide" data-nb="38" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Requêtes complexes</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est parfois nécessaire de réaliser des requêtes plus complexes :
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <ul class="list-group">
+              <li class="list-group-item">Jointures</li>
+              <li class="list-group-item">Sous-requêtes</li>
+              <li class="list-group-item">Union</li>
+            </ul>
+          </div>
+          <div class="container-fluid big-top-margin">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-sousrequetes-jointures" class="step slide" data-nb="39" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Jointures</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les jointures permettent d'effectuer des requêtes sur deux tables liées généralement par une clé étrangère.
+            </div>
+          </div>
+          <div class="container-fluid small-font row">
+            <div class="col-lg-6 text-left"><pre><code class="mysql">--Jointure interne
+SELECT * FROM vehicule v, proprietaire p
+INNER JOIN proprietaire p ON v.proprietaire_id = p.id;
+
+--Jointure externe à gauche 
+SELECT * FROM vehicule v, proprietaire p
+LEFT JOIN proprietaire p ON v.proprietaire_id = p.id;
+
+--Jointure externe à droite 
+SELECT * FROM vehicule v, proprietaire p
+RIGHT JOIN proprietaire p ON v.proprietaire_id = p.id;
+
+--Jointure externe non supportée en MySQL
+
+--Autres syntaxes lorsque les champs des deux tables ont le
+--même nom, ici prop_id.
+SELECT * FROM vehicule INNER JOIN proprietaire USING (prop_id);
+SELECT * FROM vehicule NATURAL JOIN proprietaire;</code></pre></div>
+            <div class="col-lg-6 text-right"><img data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="<img src='img/memejoin.jpg' width='200'>" src="img/SQL_Joins.png" height="600px" alt=""></div>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible de faire manuellement une jointure avec une clause <code>WHERE</code> mais cela est moins performant et la requête peut être moins lisible lorsqu'il y a d'autres clauses <code>WHERE</code>. 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-sousrequetes-sousrequetes" class="step slide" data-nb="40" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Sous-requêtes</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est impossible d'imbriquer plusieurs requêtes pour effectuer des opérations poussées d'un seul coup. 
+            </div>
+          </div>
+          <div class="container-fluid row small-font text-left">
+            <pre class="col-lg-6"><code class="sql">--Propriétaire ayant une BMW et une Peugeot
+SELECT p.* FROM proprietaire p
+INNER JOIN vehicule v ON v.proprietaire_id = p.id 
+WHERE v.marque = 'BMW'
+AND EXISTS (
+  SELECT p2.* FROM proprietaire p2
+  INNER JOIN vehicule v2 ON v2.proprietaire_id = p2.id 
+  WHERE p2.id = p.id
+  AND v2.marque = 'Peugeot'
+);
+
+--Propriétaire le + jeune vs propriétaire de BMW le + jeune
+SELECT MAX(prop.date_naissance), MAX(p.dtN) 
+FROM proprietaire prop, (
+  SELECT p2.date_naissance as dtN FROM proprietaire p2
+  INNER JOIN vehicule v2 ON v2.proprietaire_id = p2.id 
+  AND v2.marque = 'BMW'
+ ) AS p;</code></pre>
+ <pre class="col-lg-6"><code class="sql">--On supprime les propriétaires de Lada
+<span data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<img src='img/lada.png' width='200'>">DELETE FROM proprietaire p
+WHERE p.id IN (
+  SELECT v.proprietaire_id FROM vehicule v 
+  WHERE v.marque = 'Lada'
+);</span>
+
+--Les propriétaire de Ferrari sont chanceux...
+UPDATE test.proprietaire SET commentaires = 'Chanceux !' 
+WHERE id = (
+  SELECT v.proprietaire_id FROM test.vehicule v 
+  WHERE v.marque = 'Ferrari'
+);
+
+<span data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<img src='img/f12.jpg' width='180'>">--Les trentenaires ont doit à une Ferrari !
+INSERT INTO vehicule (marque, modele, proprietaire_id)
+SELECT 'Ferrari', 'F12', id as proprietaire_id
+FROM proprietaire WHERE YEAR(date_naissance) = 1987;</span></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les sous-requêtes ne sont possibles que pour des <code>SELECT</code>, <code>UPDATE</code>, <code>DELETE</code> ou <code>INSERT</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-sousrequetes-union" class="step slide" data-nb="41" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3"><code>UNION</code></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible de joindre les résultats de deux requêtes en utilisant <code>UNION</code> à condition que le nombre de colonnes (ainsi que leur type et l'ordre d'affichage) entre les différents <code>SELECT</code> soit identique.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">--Proriétaires de Citroën et/ou de Peugeot
+SELECT p.* FROM test.proprietaire p
+INNER JOIN test.vehicule v ON v.proprietaire_id = p.id 
+WHERE v.marque = 'Citroën'
+UNION
+SELECT p.* FROM test.proprietaire p
+INNER JOIN test.vehicule v ON v.proprietaire_id = p.id 
+WHERE v.marque = 'Peugeot'</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;L'intersection entre deux <code>SELECT</code> n'est pas supporté en MySQL. Il faut passer par une clause de type <code>WHERE EXISTS</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-vues" class="step slide" data-nb="42" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Vues</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="client-curseurs" class="step slide" data-nb="43" data-rel-x="2000" data-y="3300">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Curseurs</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server" class="step slide" data-nb="44" data-x="0" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Serveur</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-procstock" class="step slide" data-nb="45" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Procédures stockées</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>procédures stockées</strong> représentent des ensembles nommés de requêtes SQL qui sont stockées dans la base. Lorsqu'elles sont appelées, les requêtes SQL dont elles sont composées sont exécutées.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">CREATE PROCEDURE sp_name ([<span class="text-info">proc_parameter</span>[,...]]) <span class="text-primary">routine_body</span>
+
+<span class="text-info">proc_parameter</span>:
+    [ IN | OUT | INOUT ] param_name type
+<span class="text-primary">routine_body</span>:
+    Requête(s) SQL valides
+
+--Exemple
+<span data-toggle="popover" data-offset="-30px" data-trigger="hover click" data-placement="right" data-html="true"
+                data-title="Changement du délimiteur" data-content="On doit changer le <strong>délimiteur</strong> de fin de requête car comme une procédure stockée contient des requêtes, sa déclaration s'arrêterait au premier <code>;</code> rencontré. Ici on choisit le caractère <code>|</code>. Le délimiteur est défini pour la session en cours." data-template="<div class='popover large-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">DELIMITER |</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true"
+          data-title="Nom et paramètres de la procédure" data-content="On définit le nom de la procédure, ainsi que ces éventuels paramètres. Ici, un paramètre de sortie de type <code>INT</code> nommé <code>nb_immat_null</code>." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">CREATE PROCEDURE supprime_vehicule_sans_immat(OUT nb_immat_null INT)</span>      
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Début du corps de la procédure" data-content="<code>BEGIN</code> est utilisé pour signaler le début du corps de la procédure.">BEGIN</span>
+  <span data-toggle="popover" data-offset="60px" data-trigger="hover click" data-placement="right" data-html="true"
+      data-title="Corps de la procédure" data-content="Le corps de la procédure contient les requêtes SQL à exécuter lors de l'appel de la procédure stockée. Ici, on compte le nombre de véhicules avec une immatriculation non définie (que l'on stocke dans la variable de sortie <code>nb_immat_null</code>) et on les supprime.">SELECT COUNT(*) INTO nb_immat_null FROM vehicule WHERE immatriculation IS NULL;
+  DELETE FROM vehicule WHERE immatriculation IS NULL; </span>
+<span data-toggle="popover" data-offset="50px" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Fin du corps de la procédure" data-content="<code>END</code>suivi du délimiteur précédemment défini est utilisé pour signaler la fin de la requête de création de la procédure.">END|</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true"
+    data-title="Restauration du délimiteur" data-content="On remet le délimiteur à sa valeur par défaut, <code>;</code>">DELIMITER ;</span>
+
+CALL supprime_vehicule_sans_immat(@nb_immat_null);
+SELECT @nb_immat_null;</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer une procédure stockée, on utilise <code>DROP PROCEDURE supprime_vehicule_sans_immat;</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div id="server-fonctions" class="step slide" data-nb="46" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Fonctions</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Une fonction est également un ensemble de requêtes nommé mais avec que des paramètres en entrée et un seul paramètre en sortie. On ne les appelle pas avec <code>CALL</code>, mais on les référence directement dans une requête. 
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">CREATE FUNCTION sp_name ([<span class="text-info">func_parameter</span>[,...]]) RETURNS type <span class="text-info">routine_body</span>
+<span class="text-info">func_parameter</span>: param_name <span class="text-primary">type</span>
+type:           Type SQL valide
+<span class="text-primary">routine_body</span>:   Requêtes SQL valides
+
+--Exemple
+DELIMITER |
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true"
+    data-title="Nom et paramètres" data-content="On définit le nom de la fonction, les paramètres en entrée facultatifs (nom et type) et le paramètre de sortie obligatoire (nom et type).">CREATE FUNCTION format_immat(t VARCHAR(50)) RETURNS VARCHAR(9)</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true"
+    data-title="Corps de la fonction" data-content="On utilise <code>RETURN</code> pour retourner la valeur de sortie de la fonction. Ici si l'immatriculation est au format <code>aa999aa</code>, on la retourne formattée : <code>AA-999-AA</code>, sinon on renvoie <code>'INCORRECT'</code>. Pour toutes les fonctions sur les chaînes de caractère, voir <a href='https://dev.mysql.com/doc/refman/5.7/en/string-functions.html' target='_blank'>ici</a>." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">BEGIN
+  IF t REGEXP '^[a-zA-Z]{2}[0-9]{3}[a-zA-Z]{2}$' THEN
+    RETURN UPPER(CONCAT(SUBSTR(t,1,2), '-',SUBSTR(t,3,3), '-', SUBSTR(t,5,2)));
+  ELSE
+    RETURN 'INCORRECT';
+  END IF;
+END|</span>
+DELIMITER ;
+
+SELECT format_immat('aa123bb');
+--affiche AA-123-BB</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer une fonction, on utilise la syntaxe <code>DROP FUNCTION format_immat;</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-triggers" class="step slide" data-nb="47" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Triggers</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>triggers</strong> (déclencheurs) sont un ensemble de requêtes SQL exécutées avant ou après chaque insertion, suppression ou modification des lignes d'une table.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sql">CREATE TRIGGER trigger_name <span class="text-info">trigger_time</span> <span class="text-primary">trigger_event</span> ON tbl_name FOR EACH ROW
+    [<span class="text-warning">trigger_order</span>] <span class="text-danger">trigger_body</span>
+
+<span class="text-info" data-toggle="popover" data-offset="-55px" data-trigger="hover click" data-placement="left" data-html="true" data-title="Moment de déclenchement" data-content="On peut choisir de déclencher le trigger avant (lorsqu'on veut effectuer des vérifications par exemple) ou après (lorsqu'on veut journaliser ce qui vient de se passer par exemple) l'événement. " data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">trigger_time</span>: { BEFORE | AFTER }
+<span class="text-primary" data-toggle="popover" data-offset="65px" data-trigger="hover click" data-placement="left" data-html="true" data-title="Événement de déclenchement" data-content="L'événement déclencheur du trigger peut être soit une insertion, soit une modification soit une suppression. Le trigger s'exécute autant de fois que l'événement survient. Si une requête supprime trois lignes, un trigger <code>DELETE</code> s'exécutera pour chacune des trois lignes." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">trigger_event</span>: { INSERT | UPDATE | DELETE }
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-title="Ordre de déclenchement" data-content="Lorsque plusieurs triggers sont définis sur un même événement, on peut définir l'ordre d'exécution des triggers en spécificant s'il doit s'exécuter avant ou après un autre." data-template="<div class='popover medium-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>"><span class="text-warning">trigger_order</span>: { FOLLOWS | PRECEDES } other_trigger_name</span>
+<span class="text-danger">trigger_body</span>:
+    <span data-toggle="popover" data-offset="40px" data-trigger="hover click" data-placement="right" data-html="true"
+        data-title="Corps du trigger" data-content="Il peut contenir des requêtes classiques, mais deux variables sont également disponibles, <code>OLD</code> et <code>NEW</code>. <code>OLD</code> correspond à la ligne avant modification ou suppression et <code>NEW</code> correspond à la ligne après insertion ou modification. Il est possible de mettre à jour des colonnes de la variable <code>NEW</code> en utilisant <code>SET</code>" data-template="<div class='popover large-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body'></div></div>">Requête(s) SQL valides</span>
+
+--Exemple
+DELIMITER |
+CREATE TRIGGER commentaire_insert BEFORE UPDATE ON vehicule FOR EACH ROW
+  BEGIN
+    SET NEW.commentaire = CONCAT('Immat précédente : ', OLD.immatriculation);    
+  END|
+DELIMITER ;
+INSERT INTO vehicule (...) VALUES ('Peugeot', '208', 'AA-123-BB', '2017-10-02');
+UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
+--dans le champ commentaire : Immat précédente : AA-123-BB</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour supprimer un trigger, on utilise la syntaxe <code>DROP TRIGGER commentaire_insert;</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-comparatif" class="step slide" data-nb="48" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Utilisation des fonctions, triggers et procédures stockées</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Ces techniques sont à utiliser judicieusement et il ne faut pas en abuser. Voici les éléments à considérer avant d'utiliser telle ou telle technique :
+            </div>
+          </div>
+          <div class="container-fluid small-font row">
+            <div class="col-lg-6">
+              <ul class="list-group">
+                <li class="list-group-item list-group-item-primary">Questions ou reflexions</li>
+                <li class="list-group-item"><em>Il est important que ce code soit portable, testable et versionné</em></li>
+                <li class="list-group-item"><em>Ce code effectue des traitements purement fonctionnels</em></li>
+                <li class="list-group-item"><em>Ce code doit être évolutif</em></li>
+                <li class="list-group-item"><em>Ce code n'est utilisé qu'à un seul endroit</em></li>
+                <li class="list-group-item"><em>L'ensemble des clients est maîtrisé</em></li>
+                <li class="list-group-item"><em>Le serveur a une capacité de calcul limitée</em></li>
+                <li class="list-group-item"><em>Ce code est utilisé par plusieurs clients différents</em></li>
+                <li class="list-group-item"><em>Ce code effectue des traitements purement techniques</em></li>
+                <li class="list-group-item"><em>Le client a une capacité de calcul limitée</em></li>
+                <li class="list-group-item"><em>Vous ne maîtriser pas tous les clients</em></li>
+              </ul>
+            </div>
+            <div class="col-lg-6">
+              <table class="table table-striped small-font text-center">
+                <thead>
+                  <tr>
+                    <th class="text-center">Triggers</th>
+                    <th class="text-center">Procédures stockées</th>
+                    <th class="text-center">Fonctions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-question-circle text-warning"></i></td>
+                      <td><i class="fa fa-icon fa-question-circle text-warning"></i></td>
+                      <td><i class="fa fa-icon fa-question-circle text-warning"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-down text-danger"></i></td>
+                  </tr>
+
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                  </tr>
+                  <tr>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                      <td><i class="fa fa-icon fa-thumbs-o-up text-success"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Ces considérations sont subjectives et dépendent de la philosophie adoptée dans le projet et des contraintes techniques.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-prepared" class="step slide" data-nb="49" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Requêtes préparées</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-impexp" class="step slide" data-nb="50" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Importer ou exporter une base</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est souvent nécessaire d'effectuer des imports ou des exports de base pour effectuer des sauvegardes ou des restaurations de données par exemple. On peut utiliser des clients (MySQL Workbench) pour des besoins ponctuels et sur des petits volumes. Sinon, on peut utiliser <code>mysqldump</code> dans une console.
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="sh">mysqldump [options] db_name [tbl_name ...]
+mysqldump [options] --all-databases
+
+#Exemples
+#Exporter la base db_name dans un fichier SQL
+mysqldump db_name > backup-file.sql
+
+#Importer un dump dans une base
+mysql db_name < backup-file.sql
+</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour la liste complète des options, voir <a href="https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html" target="_blank">ici</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus" class="step slide" data-nb="51" data-x="0" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Bonus</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-curseurs" class="step slide" data-nb="52" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Curseurs</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-clusters" class="step slide" data-nb="53" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Clusters</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-engine" class="step slide" data-nb="54" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Moteurs de stockage</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="java"></code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script src="js/impress.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/highlight.min.js"></script>
+<script src="js/script.js"></script>
+
