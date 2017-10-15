@@ -47,19 +47,21 @@ $(window).on('hashchange', function(e){
     
 });
 
-$(window).on('contextmenu', function(e){
+$(window).on('mousewheel', function(event) {
+  if(event.deltaY < 0) {
+    imp.next();
+  } else{
+    imp.prev();
+  }
   e.preventDefault();
-  imp.prev();
-});
-
-$(window).on('click', function(e){
-  if( (e.which == 2) ) {
-      e.preventDefault();
-      imp.next();
-   }
 });
 
 //-------------------
+$("#curdate").html(moment().format("YYYY-MM-DD"));
+$("#curtime").html(moment().format("HH-mm-ss"));
+$("#curyear").html(moment().format("YYYY"));
+$("#curmonth").html(moment().format("MM"));
+$("#curday").html(moment().format("DD"));
 
 $("#correctGeneric").click(function(event) {
   $(event.target).toggleClass('btn-primary').toggleClass('btn-success');

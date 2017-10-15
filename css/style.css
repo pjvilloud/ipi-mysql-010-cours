@@ -82,7 +82,7 @@ ul.no-border > li {
     max-width: 40vw;
 }
 
-.java.no-padding {
+.java.no-padding, .sql.no-padding {
     padding: 2.5px;
 }
 

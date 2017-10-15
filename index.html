@@ -77,7 +77,7 @@
           <a class="dropdown-item" href="#client-transaction">Notion de transaction</a>
           <a class="dropdown-item" href="#client-requetes">Requêtes complexes</a>
           <a class="dropdown-item" href="#client-vues">Vues</a>
-          <a class="dropdown-item" href="#client-fonctions">Curseurs</a>
+          <a class="dropdown-item" href="#client-expressions">Expressions et fonctions</a>
         </ul>
       </li>
       <li class="nav-item dropdown">
@@ -85,6 +85,7 @@
           Développement <em>serveur</em>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownServer">
+          <a class="dropdown-item" href="#server-flow">Flot d'exécution et variables</a>
           <a class="dropdown-item" href="#server-procstock">Procédures stockées</a>
           <a class="dropdown-item" href="#server-fonctions">Fonctions</a>
           <a class="dropdown-item" href="#server-triggers">Triggers</a>
@@ -99,8 +100,6 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownBonus">
           <a class="dropdown-item" href="#bonus-curseurs">Curseurs</a>
-          <a class="dropdown-item" href="#bonus-clusters">Clusters</a>
-          <a class="dropdown-item" href="#bonus-engine">Moteurs de stockage</a>
         </div>
       </li>
     </ul>
@@ -357,8 +356,8 @@
               <li class="list-group-item">Exécuter des requêtes SQL issues d'un fichier</li>
               <li class="list-group-item">Manipuler des index</li>
               <li class="list-group-item">Gérer des contraintes</li>
-              <li class="list-group-item">Gérer des contraintes</li>
-              <li class="list-group-item">Effectuer des requêtes complexes</li>
+              <li class="list-group-item">Gérer des index</li>
+              <li class="list-group-item">Effectuer des requêtes complexess</li>
               <li class="list-group-item">Manipuler des vues</li>
             </ul>
           </div>
@@ -413,8 +412,6 @@ mysql -u toto -p -D base -h hote -P 3307</code></pre>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour créer une <strong>base de données</strong> ou un <strong>schéma</strong> (équivalent en MySQL), on utilise la commande suivante :
-                Encodage
-Interclassement, moteur de stockage, schéma, create, alter, drop
             </div>
           </div>
           <div class="container small-font text-left">
@@ -802,8 +799,8 @@ TINYINT UNSIGNED : 256 => 255</code>
                     <td>
                       <code class="text-success">TEXT</code> 65 535 caractères <br> 
                       <code class="text-info">TINYTEXT</code> 255 caractères <br>
-                      <code class="text-info">MEDIUMTEXT</code> 16 777 215 bytes <br> 
-                      <code class="text-info">LONGTEXT</code> 4 294 967 295 bytes
+                      <code class="text-info">MEDIUMTEXT</code> 16 777 215 caractères <br> 
+                      <code class="text-info">LONGTEXT</code> 4 294 967 295 caractères
                     </td>
                 </tr>
               </tbody>
@@ -1370,17 +1367,12 @@ COMMIT;</code></pre>
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est parfois nécessaire de réaliser des requêtes plus complexes :
             </div>
           </div>
-          <div class="container small-font text-left">
+          <div class="container small-font ">
             <ul class="list-group">
               <li class="list-group-item">Jointures</li>
               <li class="list-group-item">Sous-requêtes</li>
               <li class="list-group-item">Union</li>
             </ul>
-          </div>
-          <div class="container-fluid big-top-margin">
-            <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
-            </div>
           </div>
         </div>
       </div>
@@ -1414,7 +1406,7 @@ RIGHT JOIN proprietaire p ON v.proprietaire_id = p.id;
 --même nom, ici prop_id.
 SELECT * FROM vehicule INNER JOIN proprietaire USING (prop_id);
 SELECT * FROM vehicule NATURAL JOIN proprietaire;</code></pre></div>
-            <div class="col-lg-6 text-right"><img data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="<img src='img/memejoin.jpg' width='200'>" src="img/SQL_Joins.png" height="600px" alt=""></div>
+            <div class="col-lg-6 text-right"><img data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="<img src='img/memejoin.png' width='200'>" src="img/SQL_Joins.png" height="600px" alt=""></div>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
@@ -1515,36 +1507,135 @@ WHERE v.marque = 'Peugeot'</code></pre>
           <h1 class="display-3">Vues</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>vues</strong> sont des objets de la base de données permettant de stocker une requête <code>SELECT</code> particulière, ce qui est intéressant pour une requête assez complexe utilisée de nombreuses fois. Une fois créée, la vue se comporte comme une table.
             </div>
           </div>
           <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
+            <pre><code class="sql"><span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<code>OR REPLACE</code> permet de redéfinir la vue. C'est équivalent à <code>ALTER VIEW</code>. Pour supprimer une vue, on utilise <code>DROP VIEW</code>">CREATE [OR REPLACE] VIEW view_name</span> 
+  <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="On peut préciser le nom de chaque colonne de la vue lorsque des conflits sont possibles (lors de jointures par exemple). Sinon, on peut également utiliser des alias dans la requête <code>SELECT</code>.">[(column_list)]</span>
+  <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="Presque n'importe quelle requête SQL peut être utilisée (voir <a href='https://dev.mysql.com/doc/refman/5.7/en/create-view.html' target='_blank'>ici</a> les quelques restrictions). ">AS select_statement</span> 
+
+
+
+--Exemple
+CREATE VIEW proprietaire_vehicule (nom, prenom, marque, modele, immatriculation) AS
+SELECT p.nom, p.prenom, v.marque, v.modele, v.immatriculation FROM proprietaire p
+INNER JOIN vehicule v ON v.proprietaire_id = p.id;
+
+SELECT * FROM proprietaire_vehicule WHERE marque = 'BMW';</code></pre>
+            <table class="table table-striped smaller-font text-center">
+              <thead>
+                <tr>
+                  <th class="text-center">nom</th>
+                  <th class="text-center">prenom</th>
+                  <th class="text-center">marque</th>
+                  <th class="text-center">modele</th>
+                  <th class="text-center">immatriculation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td>Girard</td>
+                    <td>Isabelle</td>
+                    <td><strong>BMW</strong></td>
+                    <td>Série 4</td>
+                    <td>BB-456-CC</td>
+                </tr>
+                <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;A noter qu'il n'y a pas de gain de performance en termes de temps d'exécution des requêtes par rapport à exécuter directement le <code>SELECT</code>. Il est également possible d'effectuer des <code>INSERT</code>, <code>UPDATE</code> ou <code>DELETE</code> sur certaines vues mais cela est déconseillé.
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="client-curseurs" class="step slide" data-nb="43" data-rel-x="2000" data-y="3300">
+    <div id="client-expressions" class="step slide" data-nb="44" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
-          <h1 class="display-3">Curseurs</h1>
+          <h1 class="display-3">Expressions et fonctions</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible d'utiliser des expressions ou des fonctions pour effectuer des requêtes plus complexes :
             </div>
           </div>
-          <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
+          <div class="container-fluid small-font text-left">
+            <table class="table table-striped smaller-font text-left">
+                <thead>
+                  <tr>
+                    <th>Expression ou fonction</th>
+                    <th>Description</th>
+                    <th>Syntaxe</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                      <td><code>SUM</code>, <code>AVG</code></td>
+                      <td>Calcule la somme ou la moyenne de valeurs numériques</td>
+                      <td><pre><code class="sql no-padding">SELECT AVG(prix), SUM(prix) FROM vehicule</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>MIN</code>, <code>MAX</code></td>
+                      <td>Récupère le minimum ou le maximum d'une ensemble de valeurs</td>
+                      <td><pre><code class="sql no-padding">SELECT MIN(date_mise_circulation), MAX(date_mise_circulation) FROM vehicule</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>CEIL</code>, <code>FLOOR</code>, <code>ROUND</code></td>
+                      <td>Effectue un arrondit (inférieur, supérieur et normal) sur une valeur numérique</td>
+                      <td><pre><code class="sql no-padding">SELECT FLOOR(3.14), CEIL(3.14), ROUND(3.14) --3, 4, 3</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>CONCAT</code>, <code>UPPER</code>, <code>LOWER</code>, <code>SUBSTRING</code></td>
+                      <td>Concatène, met en majuscule ou minuscule, extrait une partie d'une chaîne</td>
+                      <td><pre><code class="sql no-padding">SELECT CONCAT(UPPER('hello'), LOWER(' WORLD '), SUBSTRING('!ZZ',1,1)) --HELLO world !</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>LIKE</code>, <code>REGEXP</code></td>
+                      <td>Teste le contenu d'une chaîne de caractère</td>
+                      <td><pre><code class="sql no-padding">SELECT * FROM vehicule WHERE immatriculation LIKE 'AA%' AND modele REGEXP '^Série [0-9]{1}$'</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>CURDATE</code> ou <code>CURTIME</code></td>
+                      <td>Récupère la date ou l'heure courante</td>
+                      <td><pre><code class="sql no-padding">SELECT CURDATE(), CURTIME() --<span id="curdate"></span>, <span id="curtime"></span></code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>YEAR</code>, <code>MONTH</code>, <code>DAYOFMONTH</code></td>
+                      <td>Extrait l'année, le mois ou le jour d'une date</td>
+                      <td><pre><code class="sql no-padding">SELECT YEAR(CURDATE()), MONTH(CURDATE()), DAYOFMONTH(CURDATE()) --<span id="curyear"></span>, <span id="curmonth"></span>, <span id="curday"></span></code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>IF</code></td>
+                      <td>Teste une condition</td>
+                      <td><pre><code class="sql no-padding">SELECT IF(marque = 'Ferrari', 'Riche', 'Moins riche') FROM vehicule</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>IFNULL</code>, <code>NULLIF</code></td>
+                      <td>Renvoie une valeur si l'expression est nulle, null si la valeur est égale à une autre</td>
+                      <td><pre><code class="sql no-padding">SELECT IFNULL(proprietaire_id, 'Sans propriétaire'), NULLIF(marque, 'Lada') FROM vehicule</code></pre></td>
+                  </tr>
+                  <tr>
+                      <td><code>CASE</code></td>
+                      <td>Renvoie une valeur en fonction de cas différents</td>
+                      <td><pre><code class="sql no-padding">SELECT CASE marque WHEN 'Ferrari' THEN 'Riche' WHEN 'Lada' THEN 'Lol' ELSE '?' END
+FROM vehicule</code></pre></td>
+                  </tr>
+                </tbody>
+              </table>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il y en a beaucoup d'autres que l'on peut voir en intégralité <a href="a href='https://dev.mysql.com/doc/refman/5.7/en/func-op-summary-ref.html" target="_blank">ici</a>.
             </div>
           </div>
         </div>
@@ -1557,15 +1648,112 @@ WHERE v.marque = 'Peugeot'</code></pre>
           <h1 class="display-3">Serveur</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Au lieu d'être simple exécutant de requêtes fournies par le client, on peut stocker des traitements directement au niveau du serveur :
             </div>
           </div>
           <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
+            <ul class="list-group">
+              <li class="list-group-item">Procédures stockées</li>
+              <li class="list-group-item">Fonctions</li>
+              <li class="list-group-item">Triggers</li>
+              <li class="list-group-item">Requêtes préparées</li>
+            </ul>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Cela s'apparente alors à de la programmation procédurale.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="server-flow" class="step slide" data-nb="44" data-rel-x="2000" data-y="4400">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Flot d'exécution et variables</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est donc possible de gérer le flot d'exécution d'un enchaînement de traitements
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <div class="row">
+              <div class="col-lg-6"><table class="table table-striped smaller-font text-left">
+                <thead>
+                  <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                    <th>Syntaxe</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                      <td>Variables</td>
+                      <td>Une variable est définir par un type et éventuellement une valeur par défaut.</td>
+                      <td><pre><code class="sql no-padding">DECLARE monEntier INT DEFAULT 0; 
+SET monEntier = 1;</code></pre></td>
+                    </tr>
+                    <tr>
+                      <td><code>CASE</code></td>
+                      <td>Exécute les traitements en fonction de conditions</td>
+                      <td><pre><code class="sql no-padding">CASE monEntier
+  WHEN 0 THEN ...
+  WHEN 1 THEN ...
+  ELSE ...
+END CASE;</code></pre></td>
+                    </tr>
+                    <tr>
+                      <td><code>IF</code></td>
+                      <td>Exécute les traitements en fonction de conditions</td>
+                      <td><pre><code class="sql no-padding">IF monEntier > 0 THEN 
+  ... 
+ELSEIF monEntier < 0 THEN 
+  ... 
+ELSE 
+  ... 
+END IF;</code></pre></td>
+                    </tr>
+                </tbody>
+              </table></div>
+              <div class="col-lg-6">
+                <table class="table table-striped smaller-font text-left">
+                <thead>
+                  <tr>
+                    <th>Element</th>
+                    <th>Description</th>
+                    <th>Syntaxe</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td><code>LOOP</code> et <code>LEAVE</code> et <code>ITERATE</code></td>
+                      <td>Exécute les traitements tant qu'il n'y a pas une sortie explicite de la boucle avec un <code>LEAVE</code> ou un <code>RETURN</code> par exemple.</td>
+                      <td><pre><code class="sql no-padding">etiquette: LOOP 
+  IF monEntier = 0 THEN 
+    LEAVE etiquette;
+  ELSE
+    ITERATE etiquette;
+  END IF; 
+  SET x = 1;
+END LOOP;</code></pre></td>
+                    </tr>
+                    <tr>
+                      <td><code>WHILE</code></td>
+                      <td>Exécute les traitements tant qu'une condition n'est pas atteinte</td>
+                      <td><pre><code class="sql no-padding">WHILE x > 0 DO
+    ...
+END WHILE;</code></pre></td>
+                    </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;On utilise ces éléments dans le cadre de fonctions, de procédures stockées ou de triggers par exemple.
             </div>
           </div>
         </div>
@@ -1803,15 +1991,31 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
           <h1 class="display-3">Requêtes préparées</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>requêtes préparées</strong> sont des requêtes SQL stockées au niveau du serveur pour la session en cours.
             </div>
           </div>
           <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
+            <pre><code class="sql">PREPARE stmt_name FROM <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Presque n'importe qu'elle requête peut être utilisée, avec ou sans paramètre (on utilise le <code>?</code> pour symboliser un paramètre dans la requête.">preparable_stmt</span>
+
+EXECUTE stmt_name <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Lorsqu'on exécute une requête préparée, on peut passer des variables en paramètres de la requête en utilisant <code>USING</code>">[USING @var_name [, @var_name] ...]</span>
+
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="On peut supprimer manuellement une requête préparée avec <code>DEALLOCATE PREPARE</code>. Sinon, cela serait faut automatiquement en fin de session.">DEALLOCATE PREPARE stmt_name</span>
+
+--Exemple
+PREPARE vehicule_par_marque_modele FROM 
+SELECT * FROM vehicule WHERE marque = ? AND modele = ?;
+
+SET @marque = 'BMW'; SET @modele = 'Série 3';
+EXECUTE vehicule_par_marque_modele USING @marque, @modele;
+
+SET @modele = 'Série 5';
+EXECUTE vehicule_par_marque_modele USING @marque, @modele;
+
+DEALLOCATE vehicule_par_marque_modele;</code></pre>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les requêtes préparées sont peut utilisées de manière directe par les développeurs. Cependant, de nombreuses librairies <em>clientes</em> de MySQL s'appuie sur ce principe lorsqu'on exécute plusieurs fois les mêmes requêtes avec des paramètres différents.
             </div>
           </div>
         </div>
@@ -1875,36 +2079,34 @@ mysql db_name < backup-file.sql
           <h1 class="display-3">Curseurs</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>curseurs</strong> permettent de parcourir les résultats d'un <code>SELECT</code> afin d'effectuer des traitements sur ces derniers.
             </div>
           </div>
           <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
-          </div>
-          <div class="container-fluid">
-            <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <pre><code class="sql"><span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Déclaration du curseur avec définition de la requête <code>SELECT</code> dont il sera constitué.">DECLARE cursor_name CURSOR FOR select_statement</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Ouverture du curseur obligatoire avant son utilisation.">OPEN cursor_name</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Récupération de la prochaine valeur revoyée par le curseur. On utilise typiquement le <code>FETCH</code> au sein d'une boucle.">FETCH [[NEXT] FROM] cursor_name INTO var_name [, var_name] ...</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="Fermeture du curseur lorsqu'on ne l'utilise plus">CLOSE cursor_name</span>
 
-    <div id="bonus-clusters" class="step slide" data-nb="53" data-rel-x="2000" data-y="5500">
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container-fluid text-center">
-          <h1 class="display-3">Clusters</h1>
-          <div class="container-fluid">
-            <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
-            </div>
-          </div>
-          <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
+--Exemple
+CREATE PROCEDURE ex_vehicules() BEGIN
+  DECLARE v_id, v_incr, v_fin INT DEFAULT 0;
+  DECLARE c_vehicules CURSOR FOR SELECT id FROM vehicule ORDER BY immatriculation;
+  <span data-toggle="popover" data-offset="50px" data-trigger="hover click" data-placement="right" data-html="true" data-content="Afin de pouvoir sortir de la boucle lorsqu'il n'y a plus d'éléments, on peut utiliser un handler définissant un comportement lorsqu'il n'y a plus de résultats dans le curseur. Ici, on définit la variable v_fin à 1.">DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_fin = 1;</span>
+  OPEN c_vehicules;
+  loop_vehicules: LOOP
+    SET v_incr = v_incr + 1;
+    FETCH FROM c_vehicules INTO v_id;
+    IF v_fin = 1 THEN LEAVE loop_vehicules; END IF;
+    UPDATE vehicule SET commentaire = CONCAT('Véhicule n°', v_incr) WHERE id = v_id;
+  END LOOP;
+  CLOSE c_vehicules;
+END|
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Le champ commentaire aura pour valeur <code>'Véhicule n°X'</code> avec X le numéro d'ordre du <code>SELECT</code> (immatriculation croissante)">CALL ex_vehicules;</span></code></pre>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les curseurs sont relativement peu utilisés directement, la syntaxe étant peu claire et les traitements possibles en MySQL sur les données limités.
             </div>
           </div>
         </div>
@@ -1938,5 +2140,7 @@ mysql db_name < backup-file.sql
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/highlight.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/jquery.mousewheel.min.js"></script>
 <script src="js/script.js"></script>
 
