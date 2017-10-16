@@ -10,6 +10,7 @@ rootElement.addEventListener( "impress:stepenter", function(event) {
 
   var currentStep = event.target;
   var numeroSlide = $(currentStep).attr("data-nb");
+  $("#numSlide").html(numeroSlide);
   var percentageSlide = Math.round(numeroSlide * 100 / nbSlides);
   $("#progress").attr("style", "width: " + percentageSlide + "%;");
   $("#progress").attr("aria-valuenow", percentageSlide);

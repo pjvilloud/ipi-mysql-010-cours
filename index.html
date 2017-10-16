@@ -111,7 +111,8 @@
             &nbsp;
             <a class="btn btn-primary" href="https://github.com/pjvilloud" target="_blank"><i class="fa fa-icon fa-github"></i></a>
             &nbsp;
-            <a class="btn btn-primary" href="https://linkedin.com/pjvilloud" target="_blank"><i class="fa fa-icon fa-linkedin"></i></a>
+            <a class="btn btn-primary" href="https://linkedin.com/pjvilloud" target="_blank"><i class="fa fa-icon fa-linkedin"></i></a>&nbsp;
+            <a class="btn btn-primary" href="#" id="numSlide">1</a>
         </div>
     </span>
   </div>
@@ -299,13 +300,16 @@
           <h1 class="display-3">Actions sur le serveur</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Une fois MySQL installé, il est possible d'interragir avec le serveur avec le script <code>/etc/init.d/mysql</code> (sous Linux)
+                <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Une fois MySQL installé, il est possible d'interragir avec le serveur avec le script <code>/etc/init.d/mysql</code> (sous Linux) et via un service (sous Windows).
             </div>
             <div class="small-font">
               <code>/etc/init.d/mysql start|stop|restart|reload|force-reload|status</code>
             </div>
+            <div class="small-font">
+              <code><i class="fa fa-windows" aria-hidden="true"></i> + R 'services.msc'</code>
+            </div>
             <div class="alert alert-primary small-font big-top-margin" role="alert">
-                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Avec, cette commande, le serveur peut être démarré, arrêté, redémarré... On peut également consulter son statut. Il est également possible d'utiliser <code>mysqladmin</code>.
+                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Le serveur peut être démarré, arrêté, redémarré... On peut également consulter son statut. Il est également possible d'utiliser la commande <code>mysqladmin</code>.
             </div>
           </div>
         </div>
@@ -321,16 +325,22 @@
                 Une fois MySQL installé, effectuer les actions suivantes permet d'assurer la sécurité et la simplicité d'utilisation :
             </div>
           </div>
-          <div class="container">
+          <div class="container-fluid">
             <ul class="list-group small-font">
-              <li class="list-group-item"><h1 class="display-4">1 : Changer le mot de passe par défaut</h1>
+              <li class="list-group-item"><h1 class="display-4">1 : Changer le mot de passe root</h1>
                 <code>sudo mysqladmin -u root -h localhost password nouveau_mdp</code>
               </li>
-              <li class="list-group-item"><h1 class="display-4">2 : Démarrer automatiquement le serveur au démarrage de la machine</h1>
-                <em>Cela est normalement automatique sur Windows (service MySQL) et Linux (script dans <code>/etc/init.d</code>)</em>
+              <li class="list-group-item"><h1 class="display-4">2 : Interdire l'accès distant pour root</h1>
+                <code>UPDATE mysql.user SET Host = 'localhost' WHERE user='root';
+FLUSH PRIVILEGES;</code>
+              </li>
+              <li class="list-group-item"><h1 class="display-4">3 : Supprimer le compte anonymous</h1>
+                <code>DELETE FROM mysql.user WHERE User='';
+FLUSH PRIVILEGES;</code>
               </li>
               <li class="list-group-item">
-                <h1 class="display-4">3 : </h1>
+                <h1 class="display-4">4 : Supprimer les éventuelles bases de test créées</h1>
+                <code>DROP DATABASE test; DELETE FROM db WHERE db='test' OR db='test\_%'; </code>
               </li>
             </ul>
 
@@ -357,7 +367,7 @@
               <li class="list-group-item">Manipuler des index</li>
               <li class="list-group-item">Gérer des contraintes</li>
               <li class="list-group-item">Gérer des index</li>
-              <li class="list-group-item">Effectuer des requêtes complexess</li>
+              <li class="list-group-item">Effectuer des requêtes complexes</li>
               <li class="list-group-item">Manipuler des vues</li>
             </ul>
           </div>
@@ -689,7 +699,7 @@ DROP DATABASE mabase;</code></pre></div>
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>ZEROFILL</code> peut être spécifié après le type (entier uniquement) lorsqu'on spécifie la largeur d'affichage. Ainsi un champ <code>SMALLINT(3) ZEROFILL</code>, 5 sera affiché <code>005</code> mais 1234 pourra bien être stocké dans ce champ et sera affiché <code>1234</code>. A noter qu'un champ <code>ZEROFILL</code> est automatiquement <code>UNSIGNED</code>.
             </div>
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>AUTO_INCREMENT</code> peut être spécifié après le type (entier ou flottant). Cela permet de gérer automatiquement des <em>séquences</em>. Ce point sera précisé plus tard.
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>AUTO_INCREMENT</code> peut être spécifié après le type (entier ou flottant). Cela permet de gérer automatiquement des <em>séquences</em>.
             </div>
             <div class="alert alert-primary small-font" role="alert">
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;MySQL gère le dépassement d'intervalle de deux manières selon le mode du serveur. <br>
@@ -937,7 +947,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="escape" class="step slide" data-nb="25" data-rel-x="2000" data-y="3300">
+    <div id="escape" class="step slide" data-nb="26" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Ça va ?</h1>
@@ -948,7 +958,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-table" class="step slide" data-nb="26" data-rel-x="2000" data-y="3300">
+    <div id="client-table" class="step slide" data-nb="27" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Création de tables</h1>
@@ -990,7 +1000,7 @@ CREATE TABLE IF NOT EXISTS vehicule (
       </div>
     </div>
 
-    <div id="client-table-alter" class="step slide" data-nb="27" data-rel-x="2000" data-y="3300">
+    <div id="client-table-alter" class="step slide" data-nb="28" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Modification de tables</h1>
@@ -1029,7 +1039,7 @@ ALTER TABLE vehicule
       </div>
     </div>
 
-    <div id="client-table-drop" class="step slide" data-nb="28" data-rel-x="2000" data-y="3300">
+    <div id="client-table-drop" class="step slide" data-nb="29" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Suppression de tables (et son contenu)</h1>
@@ -1054,7 +1064,7 @@ DROP TABLE IF EXISTS vehicule;</code></pre>
       </div>
     </div>
 
-    <div id="client-table-truncate" class="step slide" data-nb="29" data-rel-x="2000" data-y="3300">
+    <div id="client-table-truncate" class="step slide" data-nb="30" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Vider une table</h1>
@@ -1079,7 +1089,7 @@ TRUNCATE TABLE vehicule;
       </div>
     </div>
 
-    <div id="client-data" class="step slide" data-nb="30" data-rel-x="2000" data-y="3300">
+    <div id="client-data" class="step slide" data-nb="31" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Insertion de données dans une table</h1>
@@ -1113,7 +1123,7 @@ TRUNCATE TABLE vehicule;
       </div>
     </div>
 
-    <div id="client-data-select" class="step slide" data-nb="31" data-rel-x="2000" data-y="3300">
+    <div id="client-data-select" class="step slide" data-nb="32" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Lecture des données des tables</h1>
@@ -1151,7 +1161,7 @@ HAVING count(*) > 2;</code></pre>
       </div>
     </div>
 
-    <div id="client-data-update" class="step slide" data-nb="32" data-rel-x="2000" data-y="3300">
+    <div id="client-data-update" class="step slide" data-nb="33" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Mise à jour de données</h1>
@@ -1187,7 +1197,7 @@ UPDATE vehicule SET marque = 'BMW' WHERE marque = 'bmw';</code></pre>
       </div>
     </div>
 
-    <div id="client-data-delete" class="step slide" data-nb="33" data-rel-x="2000" data-y="3300">
+    <div id="client-data-delete" class="step slide" data-nb="34" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Suppression de données</h1>
@@ -1214,7 +1224,7 @@ DELETE FROM vehicule WHERE date_mise_circulation < '2017-01-01';</code></pre>
       </div>
     </div>
 
-    <div id="client-fichiersql" class="step slide" data-nb="34" data-rel-x="2000" data-y="3300">
+    <div id="client-fichiersql" class="step slide" data-nb="35" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Exécuter un fichier SQL</h1>
@@ -1251,7 +1261,7 @@ source create.sql
       </div>
     </div>
 
-    <div id="client-contraintes" class="step slide" data-nb="35" data-rel-x="2000" data-y="3300">
+    <div id="client-contraintes" class="step slide" data-nb="36" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les contraintes d'intégrité</h1>
@@ -1289,7 +1299,7 @@ ALTER TABLE vehicule DROP FOREIGN KEY fk_vehicule_proprietaire;</span></code></p
       </div>
     </div>
 
-    <div id="client-index" class="step slide" data-nb="36" data-rel-x="2000" data-y="3300">
+    <div id="client-index" class="step slide" data-nb="37" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les index</h1>
@@ -1323,7 +1333,7 @@ CREATE INDEX idx_immat ON vehicule(immatriculation(2));</code></pre>
       </div>
     </div>
 
-    <div id="client-transaction" class="step slide" data-nb="37" data-rel-x="2000" data-y="3300">
+    <div id="client-transaction" class="step slide" data-nb="38" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">La notion de transaction</h1>
@@ -1358,7 +1368,7 @@ COMMIT;</code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes" class="step slide" data-nb="38" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes" class="step slide" data-nb="39" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Requêtes complexes</h1>
@@ -1378,7 +1388,7 @@ COMMIT;</code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes-jointures" class="step slide" data-nb="39" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-jointures" class="step slide" data-nb="40" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Jointures</h1>
@@ -1417,13 +1427,13 @@ SELECT * FROM vehicule NATURAL JOIN proprietaire;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-sousrequetes-sousrequetes" class="step slide" data-nb="40" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-sousrequetes" class="step slide" data-nb="41" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Sous-requêtes</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est impossible d'imbriquer plusieurs requêtes pour effectuer des opérations poussées d'un seul coup. 
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est possible d'imbriquer plusieurs requêtes pour effectuer des opérations poussées d'un seul coup. 
             </div>
           </div>
           <div class="container-fluid row small-font text-left">
@@ -1459,7 +1469,7 @@ WHERE id = (
   WHERE v.marque = 'Ferrari'
 );
 
-<span data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<img src='img/f12.jpg' width='180'>">--Les trentenaires ont doit à une Ferrari !
+<span data-toggle="popover" class="fun" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="<img src='img/f12.jpg' width='180'>">--Les trentenaires ont droit à une Ferrari !
 INSERT INTO vehicule (marque, modele, proprietaire_id)
 SELECT 'Ferrari', 'F12', id as proprietaire_id
 FROM proprietaire WHERE YEAR(date_naissance) = 1987;</span></code></pre>
@@ -1473,7 +1483,7 @@ FROM proprietaire WHERE YEAR(date_naissance) = 1987;</span></code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes-union" class="step slide" data-nb="41" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-union" class="step slide" data-nb="42" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3"><code>UNION</code></h1>
@@ -1501,7 +1511,7 @@ WHERE v.marque = 'Peugeot'</code></pre>
       </div>
     </div>
 
-    <div id="client-vues" class="step slide" data-nb="42" data-rel-x="2000" data-y="3300">
+    <div id="client-vues" class="step slide" data-nb="43" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Vues</h1>
@@ -1642,7 +1652,7 @@ FROM vehicule</code></pre></td>
       </div>
     </div>
 
-    <div id="server" class="step slide" data-nb="44" data-x="0" data-y="4400">
+    <div id="server" class="step slide" data-nb="45" data-x="0" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Serveur</h1>
@@ -1659,7 +1669,7 @@ FROM vehicule</code></pre></td>
               <li class="list-group-item">Requêtes préparées</li>
             </ul>
           </div>
-          <div class="container-fluid">
+          <div class="container-fluid big-top-margin">
             <div class="alert alert-primary small-font" role="alert">
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;Cela s'apparente alors à de la programmation procédurale.
             </div>
@@ -1668,7 +1678,7 @@ FROM vehicule</code></pre></td>
       </div>
     </div>
 
-    <div id="server-flow" class="step slide" data-nb="44" data-rel-x="2000" data-y="4400">
+    <div id="server-flow" class="step slide" data-nb="46" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Flot d'exécution et variables</h1>
@@ -1760,7 +1770,7 @@ END WHILE;</code></pre></td>
       </div>
     </div>
 
-    <div id="server-procstock" class="step slide" data-nb="45" data-rel-x="2000" data-y="4400">
+    <div id="server-procstock" class="step slide" data-nb="47" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Procédures stockées</h1>
@@ -1805,7 +1815,7 @@ SELECT @nb_immat_null;</code></pre>
       </div>
     </div>
 
-      <div id="server-fonctions" class="step slide" data-nb="46" data-rel-x="2000" data-y="4400">
+      <div id="server-fonctions" class="step slide" data-nb="48" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Fonctions</h1>
@@ -1846,7 +1856,7 @@ SELECT format_immat('aa123bb');
       </div>
     </div>
 
-    <div id="server-triggers" class="step slide" data-nb="47" data-rel-x="2000" data-y="4400">
+    <div id="server-triggers" class="step slide" data-nb="49" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Triggers</h1>
@@ -1886,7 +1896,7 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
       </div>
     </div>
 
-    <div id="server-comparatif" class="step slide" data-nb="48" data-rel-x="2000" data-y="4400">
+    <div id="server-comparatif" class="step slide" data-nb="50" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Utilisation des fonctions, triggers et procédures stockées</h1>
@@ -1985,7 +1995,7 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
       </div>
     </div>
 
-    <div id="server-prepared" class="step slide" data-nb="49" data-rel-x="2000" data-y="4400">
+    <div id="server-prepared" class="step slide" data-nb="51" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Requêtes préparées</h1>
@@ -1999,7 +2009,7 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
 
 EXECUTE stmt_name <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Lorsqu'on exécute une requête préparée, on peut passer des variables en paramètres de la requête en utilisant <code>USING</code>">[USING @var_name [, @var_name] ...]</span>
 
-<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="On peut supprimer manuellement une requête préparée avec <code>DEALLOCATE PREPARE</code>. Sinon, cela serait faut automatiquement en fin de session.">DEALLOCATE PREPARE stmt_name</span>
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="On peut supprimer manuellement une requête préparée avec <code>DEALLOCATE PREPARE</code>. Sinon, cela serait fait automatiquement en fin de session.">DEALLOCATE PREPARE stmt_name</span>
 
 --Exemple
 PREPARE vehicule_par_marque_modele FROM 
@@ -2022,7 +2032,7 @@ DEALLOCATE vehicule_par_marque_modele;</code></pre>
       </div>
     </div>
 
-    <div id="server-impexp" class="step slide" data-nb="50" data-rel-x="2000" data-y="4400">
+    <div id="server-impexp" class="step slide" data-nb="52" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Importer ou exporter une base</h1>
@@ -2040,7 +2050,7 @@ mysqldump [options] --all-databases
 mysqldump db_name > backup-file.sql
 
 #Importer un dump dans une base
-mysql db_name < backup-file.sql
+mysqlimport -u root -p db_name backup-file.sql
 </code></pre>
           </div>
           <div class="container-fluid">
@@ -2052,28 +2062,25 @@ mysql db_name < backup-file.sql
       </div>
     </div>
 
-    <div id="bonus" class="step slide" data-nb="51" data-x="0" data-y="5500">
+    <div id="bonus" class="step slide" data-nb="53" data-x="0" data-y="5500">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Bonus</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Quelques fonctionnalités avancées de MySQL
             </div>
           </div>
-          <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
-          </div>
-          <div class="container-fluid">
-            <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
-            </div>
+          <div class="container small-font">
+            <ul class="list-group">
+              <li class="list-group-item">Clusters</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="bonus-curseurs" class="step slide" data-nb="52" data-rel-x="2000" data-y="5500">
+    <div id="bonus-curseurs" class="step slide" data-nb="54" data-rel-x="2000" data-y="5500">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Curseurs</h1>
@@ -2113,7 +2120,7 @@ END|
       </div>
     </div>
 
-    <div id="bonus-engine" class="step slide" data-nb="54" data-rel-x="2000" data-y="5500">
+    <div id="bonus-engine" class="step slide" data-nb="55" data-rel-x="2000" data-y="5500">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Moteurs de stockage</h1>
