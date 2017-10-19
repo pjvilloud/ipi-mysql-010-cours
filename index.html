@@ -440,7 +440,11 @@ CREATE DATABASE IF NOT EXISTS mabase;
 CREATE DATABASE mabase CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 --Pour voir l'encodage et la collation par défaut du serveur
-SELECT @@character_set_server, @@collation_server; </code></pre>
+SELECT @@character_set_server, @@collation_server; 
+--Pour sélectionner une base par défaut
+<span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="left" data-html="true" data-content="En utilisant cette commande, toutes les requêtes SQL suivantes porteront directement sur la base sélectionnée. Si on n'utilise pas cette commande on devra spécifier à chaque fois la base (<code>mabase.matable</code>)">USE mabase;</span>
+--Pour voir l'encodage l'encodage et la collation de la base (après un USE)
+SELECT @@character_set_database, @@collation_database; </code></pre>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
@@ -1309,7 +1313,7 @@ ALTER TABLE vehicule DROP FOREIGN KEY fk_vehicule_proprietaire;</span></code></p
             </div>
           </div>
           <div class="container small-font text-left">
-            <pre><code class="sql">CREATE [UNIQUE] INDEX index_name
+            <pre><code class="sql">CREATE [UNIQUE] {INDEX|KEY} index_name
     [index_type]
     ON tbl_name (index_col_name,...)
 
@@ -1399,18 +1403,18 @@ COMMIT;</code></pre>
           </div>
           <div class="container-fluid small-font row">
             <div class="col-lg-6 text-left"><pre><code class="mysql">--Jointure interne
-SELECT * FROM vehicule v, proprietaire p
+SELECT * FROM vehicule v
 INNER JOIN proprietaire p ON v.proprietaire_id = p.id;
 
 --Jointure externe à gauche 
-SELECT * FROM vehicule v, proprietaire p
+SELECT * FROM vehicule v
 LEFT JOIN proprietaire p ON v.proprietaire_id = p.id;
 
 --Jointure externe à droite 
-SELECT * FROM vehicule v, proprietaire p
+SELECT * FROM vehicule v
 RIGHT JOIN proprietaire p ON v.proprietaire_id = p.id;
 
---Jointure externe non supportée en MySQL
+--Jointure externe complète non supportée en MySQL
 
 --Autres syntaxes lorsque les champs des deux tables ont le
 --même nom, ici prop_id.
@@ -2114,27 +2118,6 @@ END|
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
                 <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les curseurs sont relativement peu utilisés directement, la syntaxe étant peu claire et les traitements possibles en MySQL sur les données limités.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="bonus-engine" class="step slide" data-nb="55" data-rel-x="2000" data-y="5500">
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container-fluid text-center">
-          <h1 class="display-3">Moteurs de stockage</h1>
-          <div class="container-fluid">
-            <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
-            </div>
-          </div>
-          <div class="container small-font text-left">
-            <pre><code class="java"></code></pre>
-          </div>
-          <div class="container-fluid">
-            <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;
             </div>
           </div>
         </div>
