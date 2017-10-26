@@ -57,7 +57,10 @@
           Installation
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownInstallation">
-          <a class="dropdown-item" href="#installation-actions">Actions sur le serveur</a>
+          <a class="dropdown-item" href="#installation-actions">Le serveur</a>
+          <a class="dropdown-item" href="#installation-repertoire">Le répertoire <em>data</em></a>
+          <a class="dropdown-item" href="#installation-basemysql">La base <em>mysql</em></a>
+          <a class="dropdown-item" href="#installation-logs">Les logs</a>
           <a class="dropdown-item" href="#installation-reflexes">Premiers réflexes</a>
         </div>
       </li>
@@ -75,7 +78,7 @@
           <a class="dropdown-item" href="#client-index">Index</a>
           <a class="dropdown-item" href="#client-sql">Fichiers SQL</a>
           <a class="dropdown-item" href="#client-transaction">Notion de transaction</a>
-          <a class="dropdown-item" href="#client-requetes">Requêtes complexes</a>
+          <a class="dropdown-item" href="#client-sousrequetes">Requêtes complexes</a>
           <a class="dropdown-item" href="#client-vues">Vues</a>
           <a class="dropdown-item" href="#client-expressions">Expressions et fonctions</a>
         </ul>
@@ -99,7 +102,11 @@
           Bonus
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownBonus">
-          <a class="dropdown-item" href="#bonus-curseurs">Curseurs</a>
+          <a class="dropdown-item" href="#bonus-utilisateurs">La gestion des utilisateurs</a>
+          <a class="dropdown-item" href="#bonus-replication">La réplication</a>
+          <a class="dropdown-item" href="#bonus-partitioning">Le partitionnement</a>
+          <a class="dropdown-item" href="#bonus-clusters">Les clusters</a>
+          <a class="dropdown-item" href="#bonus-curseurs">Les curseurs</a>
         </div>
       </li>
     </ul>
@@ -297,7 +304,7 @@
     <div id="installation-actions" class="step slide" data-nb="9" data-rel-x="2000" data-y="2200">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
-          <h1 class="display-3">Actions sur le serveur</h1>
+          <h1 class="display-3">Le serveur</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;Une fois MySQL installé, il est possible d'interragir avec le serveur avec le script <code>/etc/init.d/mysql</code> (sous Linux) et via un service (sous Windows).
@@ -308,15 +315,149 @@
             <div class="small-font">
               <code><i class="fa fa-windows" aria-hidden="true"></i> + R 'services.msc'</code>
             </div>
-            <div class="alert alert-primary small-font big-top-margin" role="alert">
-                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Le serveur peut être démarré, arrêté, redémarré... On peut également consulter son statut. Il est également possible d'utiliser la commande <code>mysqladmin</code>.
+            <div class="alert alert-primary small-font little-top-margin" role="alert">
+                <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Le script Linux et le service Windows interagissent en fait avec le programme <code>mysqld</code> qui représente le serveur en lui-même et permet de le démarrer avec des options particulières. Pour avoir la <a href="https://dev.mysql.com/doc/refman/5.7/en/mysqld-option-tables.html" target="_blank">liste</a> de toutes les options et des variables configurables : 
+            </div>
+            <pre><code class="small-font shell">mysqld --verbose --help
+mysqld --var_name=value</code></pre>
+            <div class="row little-top-margin">
+              <div class="col-lg-6">
+                <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Pour voir les valeurs des variables de votre serveur ou des informations sur le statut ou les statistiques, vous pouvez exécuter les commandes SQL suivantes si vous êtes connectés au serveur :
+                </div>
+                <pre><code class="sql small-font text-left">SHOW VARIABLES;
+SHOW STATUS;
+SET GLOBAL max_connections = 1000;
+SET SESSION sql_mode = 'TRADITIONAL';</code></pre>
+              </div>
+              <div class="col-lg-6">
+                <div class="alert alert-primary small-font" role="alert">
+                    <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est également possible d'utiliser la commande <code>mysqladmin</code>. Par défaut, les valeurs des variables sont prises dans le fichier <code>/etc/mysql/my.cnf</code> sous Linux et <code>my.ini</code> sous Windows ou directement dans l'exécutable depuis la version 5.7.18.
+                </div>
+                <pre><code class="sql small-font text-left">mysqladmin variables
+mysqladmin extended-status</code></pre>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="installation-reflexes" class="step slide" data-nb="10" data-rel-x="2000" data-y="2200">
+    <div id="installation-repertoire" class="step slide" data-nb="10" data-rel-x="2000" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Le répertoire <code>data</code></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Ce répertoire contient les informations gérées par le serveur, des fichiers de logs et un sous-répertoire par base de données contenues dans le serveur. Sous Linux, il est situé dans le répertoire <code>/var/lib/mysql/</code>
+            </div>
+          </div>
+          <div class="container small-font text-left">
+            <pre><code class="shell">ls -al /var/lib/mysql
+-rw-rw---- 1 mysql mysql    16384 oct.  25 21:16 aria_log.00000001
+-rw-rw---- 1 mysql mysql       52 oct.  25 21:16 aria_log_control
+-rw-r--r-- 1 root  root         0 août  16 15:51 debian-5.5.flag
+<strong>drwx------ 2 mysql mysql     4096 oct.  20 15:11 entreprise</strong>
+-rw-rw---- 1 mysql mysql 44040192 oct.  25 21:16 ibdata1
+-rw-rw---- 1 mysql mysql  5242880 oct.  26 10:00 ib_logfile0
+-rw-rw---- 1 mysql mysql  5242880 oct.  26 10:00 ib_logfile1
+<strong>drwx------ 2 mysql mysql     4096 août  16 15:51 mysql</strong>
+-rw-rw---- 1 mysql mysql       14 août  16 15:51 mysql_upgrade_info
+drwx------ 2 mysql mysql     4096 août  16 15:51 performance_schema
+            
+ls -al /var/lib/mysql/entreprise
+-rw-rw----  1 mysql mysql   61 oct.  19 09:05 db.opt
+-rw-rw----  1 mysql mysql 8822 oct.  19 09:05 Employe.frm
+-rw-rw----  1 mysql mysql 8600 oct.  19 16:59 Manager.frm
+-rw-rw----  1 mysql mysql 8630 oct.  19 16:59 Technicien.frm
+</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp; Les données des tables sont stockées dans un fichier dédié.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="installation-basemysql" class="step slide" data-nb="11" data-rel-x="2000" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">La base système <code>mysql</code></h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Cette base contient les tables qui stockent les informations nécessaires au serveur MySQL.
+            </div>
+          </div>
+          <div class="container small-font">
+            <ul class="list-group">
+              <li class="list-group-item">La gestion des droits</li>
+              <li class="list-group-item">Les objets stockés dans la base</li>
+              <li class="list-group-item">La journalisation</li>
+              <li class="list-group-item">La réplication</li>
+              <li class="list-group-item">L'optimisation</li>
+              <li class="list-group-item">...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="installation-logs" class="step slide" data-nb="12" data-rel-x="2000" data-y="2200">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les logs</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Par défaut les logs sont desactivés. Lorsqu'ils sont activés, ils sont stockés dans le répertoire <code>data</code> sous forme de fichiers ou peuvent être stockées dans des tables de la base <code>mysql</code>.
+            </div>
+          </div>
+          <div class="container-fluid small-font text-left">
+            <table class="table table-striped small-font">
+              <thead>
+                <tr>
+                  <th>Type de log</th>
+                  <th>Informations</th>
+                  <th>Activation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td >Error log</td>
+                  <td>Les problèmes rencontrés lors du démarrage, de l'arrêt ou du lancement de <a class="link" href="mysqld.html" title="4.3.1&nbsp;mysqld — The MySQL Server"><span class="command"><strong>mysqld</strong></span></a></td>
+                  <td>Activé par défaut sur Windows, voir variable <code>log_error</code></td>
+                </tr>
+                <tr>
+                  <td >General query log</td>
+                  <td>Les connexions client et les requêtes reçues de ces clients</td>
+                  <td>Variables <code>general_log_file</code> et <code>general_log</code></td>
+                </tr>
+                <tr>
+                  <td >Binary log</td>
+                  <td>Les requêtes effectuant des modifications sur les données (aussi utilisés pour la réplication)</td>
+                  <td>Variable <code>log-bin</code></td>
+                </tr>
+                <tr>
+                  <td >Slow query log</td>
+                  <td>Les requêtes qui ont pris plus de 
+                    <a class="link" href="server-system-variables.html#sysvar_long_query_time"><code class="literal">long_query_time</code></a> secondes à s'exécuter
+                  </td>
+                  <td>Variables <code>log_slow_queries</code>, <code>long_query_time</code> et <code>log-queries-not-using-indexes</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il est nécessaire de redémarrer le serveur lorsque ces changements sont faits au niveau du fichier de configuration. Il est également possible pour certaines variables de les définir sans avoir besoin de redémarrer le serveur <code>SET GLOBAL general_log = 'ON'</code> par exemple. L'activation des logs ralentit le serveur, ils ne sont donc à utiliser qu'en cas de besoin.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="installation-reflexes" class="step slide" data-nb="13" data-rel-x="2000" data-y="2200">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les premiers réflexes</h1>
@@ -349,7 +490,7 @@ FLUSH PRIVILEGES;</code>
       </div>
     </div>
 
-    <div id="client" class="step slide" data-nb="11" data-x="2000" data-y="3300">
+    <div id="client" class="step slide" data-nb="14" data-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Développement côté client</h1>
@@ -375,7 +516,7 @@ FLUSH PRIVILEGES;</code>
       </div>
     </div>
 
-    <div id="client-clientmysql" class="step slide" data-nb="12" data-rel-x="2000" data-y="3300">
+    <div id="client-clientmysql" class="step slide" data-nb="15" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Le client <code>mysql</code></h1>
@@ -415,7 +556,7 @@ mysql -u toto -p -D base -h hote -P 3307</code></pre>
       </div>
     </div>  
 
-    <div id="client-database" class="step slide" data-nb="13" data-rel-x="2000" data-y="3300">
+    <div id="client-database" class="step slide" data-nb="16" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Créer une base de données</h1>
@@ -455,7 +596,7 @@ SELECT @@character_set_database, @@collation_database; </code></pre>
       </div>
     </div>
 
-    <div id="client-database-alter" class="step slide" data-nb="14" data-rel-x="2000" data-y="3300">
+    <div id="client-database-alter" class="step slide" data-nb="17" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Modifier une base de données</h1>
@@ -485,7 +626,7 @@ ALTER DATABASE mabase CHARACTER SET = 'utf8' COLLATE = utf8_general_ci;</code></
       </div>
     </div>
 
-    <div id="client-database-drop" class="step slide" data-nb="15" data-rel-x="2000" data-y="3300">
+    <div id="client-database-drop" class="step slide" data-nb="18" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Supprimer une base de données</h1>
@@ -511,7 +652,7 @@ DROP DATABASE mabase;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-types" class="step slide" data-nb="16" data-rel-x="2000" data-y="3300">
+    <div id="client-types" class="step slide" data-nb="19" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les types de données</h1>
@@ -537,7 +678,7 @@ DROP DATABASE mabase;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-types-numeriques" class="step slide" data-nb="17" data-rel-x="2000" data-y="3300">
+    <div id="client-types-numeriques" class="step slide" data-nb="20" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Types de données entier</h1>
@@ -609,7 +750,7 @@ DROP DATABASE mabase;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-types-decimal" class="step slide" data-nb="18" data-rel-x="2000" data-y="3300">
+    <div id="client-types-decimal" class="step slide" data-nb="21" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Types de données à <em>virgule fixe</em></h1>
@@ -645,7 +786,7 @@ DROP DATABASE mabase;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-types-flottant" class="step slide" data-nb="19" data-rel-x="2000" data-y="3300">
+    <div id="client-types-flottant" class="step slide" data-nb="22" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Types de données à <em>virgule flottante</em></h1>
@@ -691,7 +832,7 @@ DROP DATABASE mabase;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-types-precisions" class="step slide" data-nb="20" data-rel-x="2000" data-y="3300">
+    <div id="client-types-precisions" class="step slide" data-nb="23" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Précisions sur les types numériques</h1>
@@ -716,7 +857,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-types-date" class="step slide" data-nb="21" data-rel-x="2000" data-y="3300">
+    <div id="client-types-date" class="step slide" data-nb="24" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Types date</h1>
@@ -772,7 +913,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-types-string" class="step slide" data-nb="22" data-rel-x="2000" data-y="3300">
+    <div id="client-types-string" class="step slide" data-nb="25" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les types chaînes</h1>
@@ -829,7 +970,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-types-binary" class="step slide" data-nb="23" data-rel-x="2000" data-y="3300">
+    <div id="client-types-binary" class="step slide" data-nb="26" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les types binaires</h1>
@@ -881,7 +1022,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-types-enumset" class="step slide" data-nb="24" data-rel-x="2000" data-y="3300">
+    <div id="client-types-enumset" class="step slide" data-nb="27" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les types à valeurs restreintes</h1>
@@ -927,7 +1068,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-types-autres" class="step slide" data-nb="25" data-rel-x="2000" data-y="3300">
+    <div id="client-types-autres" class="step slide" data-nb="28" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les autres types</h1>
@@ -951,7 +1092,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="escape" class="step slide" data-nb="26" data-rel-x="2000" data-y="3300">
+    <div id="escape" class="step slide" data-nb="29" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Ça va ?</h1>
@@ -962,7 +1103,7 @@ TINYINT UNSIGNED : 256 => 255</code>
       </div>
     </div>
 
-    <div id="client-table" class="step slide" data-nb="27" data-rel-x="2000" data-y="3300">
+    <div id="client-table" class="step slide" data-nb="30" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Création de tables</h1>
@@ -1004,7 +1145,7 @@ CREATE TABLE IF NOT EXISTS vehicule (
       </div>
     </div>
 
-    <div id="client-table-alter" class="step slide" data-nb="28" data-rel-x="2000" data-y="3300">
+    <div id="client-table-alter" class="step slide" data-nb="31" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Modification de tables</h1>
@@ -1043,7 +1184,7 @@ ALTER TABLE vehicule
       </div>
     </div>
 
-    <div id="client-table-drop" class="step slide" data-nb="29" data-rel-x="2000" data-y="3300">
+    <div id="client-table-drop" class="step slide" data-nb="32" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Suppression de tables (et son contenu)</h1>
@@ -1068,7 +1209,7 @@ DROP TABLE IF EXISTS vehicule;</code></pre>
       </div>
     </div>
 
-    <div id="client-table-truncate" class="step slide" data-nb="30" data-rel-x="2000" data-y="3300">
+    <div id="client-table-truncate" class="step slide" data-nb="33" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Vider une table</h1>
@@ -1093,7 +1234,7 @@ TRUNCATE TABLE vehicule;
       </div>
     </div>
 
-    <div id="client-data" class="step slide" data-nb="31" data-rel-x="2000" data-y="3300">
+    <div id="client-data" class="step slide" data-nb="34" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Insertion de données dans une table</h1>
@@ -1127,7 +1268,7 @@ TRUNCATE TABLE vehicule;
       </div>
     </div>
 
-    <div id="client-data-select" class="step slide" data-nb="32" data-rel-x="2000" data-y="3300">
+    <div id="client-data-select" class="step slide" data-nb="35" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Lecture des données des tables</h1>
@@ -1165,7 +1306,7 @@ HAVING count(*) > 2;</code></pre>
       </div>
     </div>
 
-    <div id="client-data-update" class="step slide" data-nb="33" data-rel-x="2000" data-y="3300">
+    <div id="client-data-update" class="step slide" data-nb="36" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Mise à jour de données</h1>
@@ -1201,7 +1342,7 @@ UPDATE vehicule SET marque = 'BMW' WHERE marque = 'bmw';</code></pre>
       </div>
     </div>
 
-    <div id="client-data-delete" class="step slide" data-nb="34" data-rel-x="2000" data-y="3300">
+    <div id="client-data-delete" class="step slide" data-nb="37" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Suppression de données</h1>
@@ -1228,7 +1369,7 @@ DELETE FROM vehicule WHERE date_mise_circulation < '2017-01-01';</code></pre>
       </div>
     </div>
 
-    <div id="client-fichiersql" class="step slide" data-nb="35" data-rel-x="2000" data-y="3300">
+    <div id="client-fichiersql" class="step slide" data-nb="38" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Exécuter un fichier SQL</h1>
@@ -1265,7 +1406,7 @@ source create.sql
       </div>
     </div>
 
-    <div id="client-contraintes" class="step slide" data-nb="36" data-rel-x="2000" data-y="3300">
+    <div id="client-contraintes" class="step slide" data-nb="39" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les contraintes d'intégrité</h1>
@@ -1303,7 +1444,7 @@ ALTER TABLE vehicule DROP FOREIGN KEY fk_vehicule_proprietaire;</span></code></p
       </div>
     </div>
 
-    <div id="client-index" class="step slide" data-nb="37" data-rel-x="2000" data-y="3300">
+    <div id="client-index" class="step slide" data-nb="40" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Les index</h1>
@@ -1337,7 +1478,7 @@ CREATE INDEX idx_immat ON vehicule(immatriculation(2));</code></pre>
       </div>
     </div>
 
-    <div id="client-transaction" class="step slide" data-nb="38" data-rel-x="2000" data-y="3300">
+    <div id="client-transaction" class="step slide" data-nb="41" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">La notion de transaction</h1>
@@ -1372,7 +1513,7 @@ COMMIT;</code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes" class="step slide" data-nb="39" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes" class="step slide" data-nb="42" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Requêtes complexes</h1>
@@ -1392,7 +1533,7 @@ COMMIT;</code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes-jointures" class="step slide" data-nb="40" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-jointures" class="step slide" data-nb="43" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Jointures</h1>
@@ -1431,7 +1572,7 @@ SELECT * FROM vehicule NATURAL JOIN proprietaire;</code></pre></div>
       </div>
     </div>
 
-    <div id="client-sousrequetes-sousrequetes" class="step slide" data-nb="41" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-sousrequetes" class="step slide" data-nb="44" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Sous-requêtes</h1>
@@ -1487,7 +1628,7 @@ FROM proprietaire WHERE YEAR(date_naissance) = 1987;</span></code></pre>
       </div>
     </div>
 
-    <div id="client-sousrequetes-union" class="step slide" data-nb="42" data-rel-x="2000" data-y="3300">
+    <div id="client-sousrequetes-union" class="step slide" data-nb="45" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3"><code>UNION</code></h1>
@@ -1515,7 +1656,7 @@ WHERE v.marque = 'Peugeot'</code></pre>
       </div>
     </div>
 
-    <div id="client-vues" class="step slide" data-nb="43" data-rel-x="2000" data-y="3300">
+    <div id="client-vues" class="step slide" data-nb="46" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Vues</h1>
@@ -1574,7 +1715,7 @@ SELECT * FROM proprietaire_vehicule WHERE marque = 'BMW';</code></pre>
       </div>
     </div>
 
-    <div id="client-expressions" class="step slide" data-nb="44" data-rel-x="2000" data-y="3300">
+    <div id="client-expressions" class="step slide" data-nb="47" data-rel-x="2000" data-y="3300">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Expressions et fonctions</h1>
@@ -1656,7 +1797,7 @@ FROM vehicule</code></pre></td>
       </div>
     </div>
 
-    <div id="server" class="step slide" data-nb="45" data-x="0" data-y="4400">
+    <div id="server" class="step slide" data-nb="48" data-x="0" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Serveur</h1>
@@ -1682,7 +1823,7 @@ FROM vehicule</code></pre></td>
       </div>
     </div>
 
-    <div id="server-flow" class="step slide" data-nb="46" data-rel-x="2000" data-y="4400">
+    <div id="server-flow" class="step slide" data-nb="49" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Flot d'exécution et variables</h1>
@@ -1774,7 +1915,7 @@ END WHILE;</code></pre></td>
       </div>
     </div>
 
-    <div id="server-procstock" class="step slide" data-nb="47" data-rel-x="2000" data-y="4400">
+    <div id="server-procstock" class="step slide" data-nb="50" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Procédures stockées</h1>
@@ -1819,7 +1960,7 @@ SELECT @nb_immat_null;</code></pre>
       </div>
     </div>
 
-      <div id="server-fonctions" class="step slide" data-nb="48" data-rel-x="2000" data-y="4400">
+      <div id="server-fonctions" class="step slide" data-nb="51" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Fonctions</h1>
@@ -1860,7 +2001,7 @@ SELECT format_immat('aa123bb');
       </div>
     </div>
 
-    <div id="server-triggers" class="step slide" data-nb="49" data-rel-x="2000" data-y="4400">
+    <div id="server-triggers" class="step slide" data-nb="52" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Triggers</h1>
@@ -1900,7 +2041,7 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
       </div>
     </div>
 
-    <div id="server-comparatif" class="step slide" data-nb="50" data-rel-x="2000" data-y="4400">
+    <div id="server-comparatif" class="step slide" data-nb="53" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Utilisation des fonctions, triggers et procédures stockées</h1>
@@ -1999,7 +2140,7 @@ UPDATE vehicule SET immatriculation = 'BB-456-CC' WHERE id = 5;
       </div>
     </div>
 
-    <div id="server-prepared" class="step slide" data-nb="51" data-rel-x="2000" data-y="4400">
+    <div id="server-prepared" class="step slide" data-nb="54" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Requêtes préparées</h1>
@@ -2036,7 +2177,7 @@ DEALLOCATE vehicule_par_marque_modele;</code></pre>
       </div>
     </div>
 
-    <div id="server-impexp" class="step slide" data-nb="52" data-rel-x="2000" data-y="4400">
+    <div id="server-impexp" class="step slide" data-nb="55" data-rel-x="2000" data-y="4400">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Importer ou exporter une base</h1>
@@ -2066,25 +2207,130 @@ mysqlimport -u root -p db_name backup-file.sql
       </div>
     </div>
 
-    <div id="bonus" class="step slide" data-nb="53" data-x="0" data-y="5500">
+    <div id="bonus-utilisateurs" class="step slide" data-nb="56" data-x="0" data-y="5500">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
-          <h1 class="display-3">Bonus</h1>
+          <h1 class="display-3">Gestion des utilisateurs</h1>
           <div class="container-fluid">
             <div class="alert alert-primary small-font" role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Quelques fonctionnalités avancées de MySQL
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les utilisateurs et leurs privilèges sont stockés dans la base <code>mysql</code> dans les tables suivantes : 
             </div>
           </div>
           <div class="container small-font">
             <ul class="list-group">
-              <li class="list-group-item">Clusters</li>
+              <li class="list-group-item"><strong>user</strong>: Comptes utilisateurs et privilèges globaux</li>
+              <li class="list-group-item"><strong>db</strong>: Privilèges niveau base</li>
+              <li class="list-group-item"><strong>tables_priv</strong>: Privilèges niveaux table</li>
+              <li class="list-group-item"><strong>columns_priv</strong>: Privilèges niveaux colonnes</li>
+              <li class="list-group-item"><strong>procs_priv</strong>: Privilèges sur les procédures stockées et les fonctions</li>
             </ul>
+            <pre class="big-top-margin"><code class="sql text-left">CREATE USER [IF NOT EXISTS] 'user'@'host' IDENTIFIED BY 'password';
+ALTER USER 'user'@'host' IDENTIFIED BY 'new_password';
+GRANT ALL ON base.* TO 'user'@'host';
+REVOKE INSERT ON base.* FROM 'user'@'host';
+DROP USER 'user'@'host';</code></pre>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Beaucoup d'options sont possibles pour la gestion utilisateur et les privilèges (sécurité, blocage de compte...) qui sont détaillées dans la <a href="https://dev.mysql.com/doc/refman/5.7/en/account-management-sql.html" target="_blank">documentation</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="bonus-curseurs" class="step slide" data-nb="54" data-rel-x="2000" data-y="5500">
+    <div id="bonus-replication" class="step slide" data-nb="57" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">La réplication</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;La <strong>réplication</strong> permet de copier tout ou partie des données issues d'un serveur (maître) vers un autre serveur (esclave). Cette fonctionnalités est asynchrone, ce qui implique que le ou les esclaves ne doivent pas forcément être joignables de manière permanente. La réplication permet : 
+            </div>
+          </div>
+          <div class="container-fluid small-font ">
+            <div class="row">
+              <ul class="list-group col-lg-6 big-top-margin">
+                <li class="list-group-item"><strong>La sécurité</strong> : Les données sont dupliquées à un ou plusieurs endroits.</li>
+                <li class="list-group-item"><strong>La performance</strong> : Les données peuvent être analysés sur les esclaves sans affecter les performances du maître.</li>
+                <li class="list-group-item"><strong>La scalabilité</strong> : Les données peuvent être lues sur les esclaves en laissant les opérations de mises à jour sur le maître.</li>
+              </ul>
+              <div class="col-lg-6">
+                <img src="img/replication.png" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Il y a plusieurs manières d'implémenter une réplication entre maître et esclave(s), voir la <a href="https://dev.mysql.com/doc/refman/5.7/en/replication.html" target="_blank">documentation</a> pour plus d'infos.
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-partitioning" class="step slide" data-nb="58" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Le partitionnement</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Le <strong>partitionnement</strong> permet de diviser une grosse base de données en deux ou plusieurs <em>sous-bases de données</em> cohérentes.
+            </div>
+          </div>
+          <div class="container-fluid small-font ">
+            <div class="row">
+              <ul class="list-group col-lg-6 big-top-margin">
+                <li class="list-group-item"><strong>La taille</strong> : Les éventuelles contraintes de taille sur les tables sont contournées.</li>
+                <li class="list-group-item"><strong>La performance</strong> : Les données sont réparties entre plusieurs bases pour équilibrer la charge.</li>
+              </ul>
+              <div class="col-lg-6">
+                <img src="img/partitioning.png" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Le partitionnement peut être fait en fonction de la valeur d'une colonne, ou d'un intervalle de valeur ou encore d'autres manières décrites dans la <a href="https://dev.mysql.com/doc/refman/5.7/en/partitioning.html" target="_blank">documentation</a>.
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-clusters" class="step slide" data-nb="59" data-rel-x="2000" data-y="5500">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container-fluid text-center">
+          <h1 class="display-3">Les clusters</h1>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font" role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les <strong>clusters</strong> permettent d'effectuer des requêtes parallèles sur plusieurs <em>nœuds</em> qui répliquent les données à l'aide d'un répartiteur de charge.
+            </div>
+          </div>
+          <div class="container-fluid small-font ">
+            <div class="row">
+              <ul class="list-group col-lg-6 big-top-margin">
+                <li class="list-group-item"><strong>La tolérance aux pannes</strong> : Les données sont toujours disponibles à condition qu'au moins un nœud soit accessible.</li>
+                <li class="list-group-item"><strong>La performance</strong> : Les requêtes peuvent être lancées en parallèle sur plusieurs noeuds.</li>
+              </ul>
+              <div class="col-lg-6">
+                <img src="img/clusters.png" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;Les clusters demandent une connaissance avancée de MySQL et des systèmes en général. Des informations approfondies peuvent être trouvées dans la  <a href="https://dev.mysql.com/doc/refman/5.7/en/mysql-innodb-cluster-userguide.html" target="_blank">documentation</a>.
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bonus-curseurs" class="step slide" data-nb="60" data-rel-x="2000" data-y="5500">
       <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid text-center">
           <h1 class="display-3">Curseurs</h1>
