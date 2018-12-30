@@ -112,7 +112,7 @@
     </ul>
     <span class="navbar-text">
         <div class="btn-group" role="group" aria-label="Basic example">
-            <a class="btn btn-primary" href="https://github.com/pjvilloud/ipi-java-220-ex" target="_blank"><i class="fa fa-icon fa-gamepad"></i></a>
+            <a class="btn btn-primary" href="https://github.com/pjvilloud/ipi-mysql-010-ex" target="_blank"><i class="fa fa-icon fa-gamepad"></i></a>
             &nbsp;
             <a class="btn btn-primary" href="mailto:pjvilloud@protonmail.com"><i class="fa fa-icon fa-envelope"></i></a>
             &nbsp;
@@ -293,8 +293,8 @@
             </div>
           </div>
           <div class="container-fluid big-top-margin">
-            <div class="alert alert-success small-font " role="alert">
-                <i class="fa fa-icon fa-check"></i>&nbsp;Ça y'est un serveur MySQL et un client en ligne de commande sont installés sur votre VM Linux, et un client graphique est installé sur votre VM Windows !
+            <div class="alert alert-primary small-font " role="alert">
+                <i class="fa fa-info-circle fa-check"></i>&nbsp;Le client et le serveur n'ont pas besoin d'être installés sur les mêmes machines, cependant, il faut que le client soit capable d'atteindre le serveur d'un point de vue réseau.
             </div>
           </div>
         </div>
@@ -645,7 +645,7 @@ ALTER DATABASE mabase CHARACTER SET = 'utf8' COLLATE = utf8_general_ci;</code></
 DROP DATABASE mabase;</code></pre></div>
           <div class="container-fluid">
             <div class="alert alert-warning small-font fun" role="alert" data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="bottom" data-html="true" data-content="<img src='img/really.gif'>" data-template="<div class='popover large-popover' role='tooltip'><div class='arrow'></div><h3 class='popover-header'></h3><div class='popover-body text-center'></div></div>">
-                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp;Évidemment, supprimer une base de données supprime toutes les données contenu dans cette dernière...
+                <i class="fa fa-icon fa-exclamation-triangle"></i>&nbsp;Évidemment, supprimer une base de données supprime toutes les données contenues dans cette dernière...
             </div>
           </div>
         </div>
@@ -665,7 +665,7 @@ DROP DATABASE mabase;</code></pre></div>
             <ul class="list-group">
               <li class="list-group-item">Types numériques</li>
               <li class="list-group-item">Types date et heure</li>
-              <li class="list-group-item">Types chaîne</li>
+              <li class="list-group-item">Types chaînes</li>
               <li class="list-group-item">Autres types</li>
             </ul>
           </div>
@@ -717,7 +717,7 @@ DROP DATABASE mabase;</code></pre></div>
                         <tr>
                           <td class="bg-success"><code>SMALLINT(M)</code></td>
                           <td class="bg-success">2 octets</td>
-                          <td class="bg-success">-37 768 à 32 767</td>
+                          <td class="bg-success">-32 768 à 32 767</td>
                           <td class="bg-info">0 à 65 535</td>
                         </tr>
                         <tr class="bg-info">
@@ -743,7 +743,7 @@ DROP DATABASE mabase;</code></pre></div>
           </div>
           <div class="container-fluid">
             <div class="alert alert-primary small-font " role="alert">
-                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>M</code> représente la largeur maximum d'affichage pour les types numériques. C'est un paramètre facultatif et sa valeur maximale est 255. Ce paramètre ne contraint pas l'intervalle de valeurs qui peut être stocké dans chaque type. 
+                <i class="fa fa-icon fa-info-circle"></i>&nbsp;<code>M</code> représente la largeur minimum d'affichage pour les types numériques. C'est un paramètre facultatif et sa valeur maximale est 255. Ce paramètre ne contraint pas l'intervalle de valeurs qui peut être stocké dans chaque type. 
             </div>
           </div>
         </div>
@@ -1164,6 +1164,7 @@ CREATE TABLE IF NOT EXISTS vehicule (
       | ADD [CONSTRAINT [symbol]] FOREIGN KEY [idx_name] (idx_col,...) reference_definition</span>
       
       <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de redéfinir une colonne afin de changer son nom, son type ou des contraintes portant sur cette colonne.">| CHANGE [COLUMN] old_col_name new_col_name column_definition</span>
+      <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de modifier une colonne afin de changer uniquement le type ou des contraintes portant sur cette colonne.">| MODIFY [COLUMN] col_name column_definition</span>
       
       <span data-toggle="popover" data-offset="0" data-trigger="hover click" data-placement="right" data-html="true" data-content="Permet de supprimer une colonne, un index, une clé primaire ou une clé étrangère.">| DROP [COLUMN] col_name
       | DROP {INDEX|KEY} index_name
